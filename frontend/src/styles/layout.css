@@ -1,0 +1,81 @@
+/* Shared utility klase — koristi ih na više ekrana */
+
+.topbar {
+    height: 56px;
+    background: var(--brand);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--s-4);
+    font-weight: 600;
+    letter-spacing: .3px;
+}
+
+.page {
+    min-height: calc(100vh - 56px);
+    display: flex; align-items: center; justify-content: center;
+    padding: var(--s-4);
+}
+
+.card {
+    width: 420px; max-width: 92vw;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: var(--s-4);
+    box-shadow: var(--shadow-1);
+}
+
+.title { margin: 0 0 var(--s-3); font-size: 28px; }
+
+.form { display: grid; gap: var(--s-2); }
+.field { display: grid; gap: 6px; }
+.field input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: var(--r-md);
+    border: 1.5px solid #0b1217;
+    background: #fff;
+}
+.field.err input {
+    border-color: var(--danger);
+}
+.field span {
+    color: var(--danger);
+    font-size: 12px;
+}
+
+.alert {
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+.alert.ok {
+    background: rgba(23,178,106,.12);
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+.alert.warn {
+    background: #fff7ed;
+    color: #9a3412;
+    border: 1px solid #fed7aa;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.cta {
+    margin-top: var(--s-3);
+    width: 160px; height: 44px;
+    border-radius: 999px;
+    border: none;
+    background: var(--accent);
+    cursor: pointer;
+}
+.cta:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
