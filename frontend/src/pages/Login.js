@@ -41,15 +41,30 @@ export default function Login() {
 
             navigate("/dashboard");
         } catch (err) {
-            const status = err?.response?.status;
-            if (status === 401) {
-                setError("identifier", { type: "server", message: "Invalid credentials" });
-                setError("password", { type: "server", message: "Invalid credentials" });
-            } else {
-                setServerMsg(err?.response?.data?.message || err.message || "Unexpected error");
-            }
+        const status = err?.status;
+
+        if (status === 0) {
+            setServerMsg("Cannot reach server. Is the backend running on http://localhost:8080?");
+            return;
         }
-    };
+
+        if (status === 401) {
+            setError("identifier", { type: "server", message: "Invalid credentials" });
+            setError("password",   { type: "server", message: "Invalid credentials" });
+        }
+        else if (err && typeof err === "object" && err.fields && typeof err.fields === "object") {
+            for (const [field, msg] of Object.entries(err.fields)) {
+                setError(field, { type: "server", message: String(msg) });
+            }
+            setServerMsg("Please correct the highlighted fields.");
+        }
+        else {
+            setServerMsg(err?.message ? String(err.message) : "Unexpected error");
+        }
+    }
+
+
+};
 
     return (
         <div className={styles.page}>

@@ -4,18 +4,25 @@ import com.sdp.cinebase.auth.dto.AuthResponse;
 import com.sdp.cinebase.auth.dto.LoginRequest;
 import com.sdp.cinebase.auth.dto.RegisterRequest;
 import com.sdp.cinebase.auth.service.AuthService;
+import com.sdp.cinebase.security.UserPrincipal;
+import com.sdp.cinebase.user.dto.UserDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import com.sdp.cinebase.user.service.UserService;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
-    public AuthController(AuthService authService) {
+    private final UserService userService;
+
+    public AuthController(AuthService authService, UserService userService) {
         this.authService = authService;
+        this.userService = userService;
     }
 
     @PostMapping("/register")
@@ -29,4 +36,8 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(req));
     }
 
+    @GetMapping("/me")
+    public UserDto me(@AuthenticationPrincipal UserPrincipal me) {
+        return userService.getById(me.getId());
+    }
 }

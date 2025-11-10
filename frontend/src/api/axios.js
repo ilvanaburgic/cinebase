@@ -7,18 +7,23 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    if (token) config.headers['Authorization'] = `Bearer ${token}`;
     return config;
 });
+
 
 api.interceptors.response.use(
     (res) => res,
     (error) => {
-        const data = error?.response?.data;
+        const data = error?.response?.data || {};
+        const normFields = data?.fields && typeof data.fields === "object"
+            ? Object.fromEntries(Object.entries(data.fields).map(([k, v]) => [k, String(v)]))
+            : null;
+
         return Promise.reject({
-            status: error?.response?.status,
-            message: data?.message || "Server error",
-            fields: data?.fields || null
+            status:  error?.response?.status ?? 0,
+            message: typeof data?.message === "string" ? data.message : "Server error",
+            fields:  normFields
         });
     }
 );

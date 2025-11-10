@@ -49,19 +49,32 @@ export default function Register() {
         try {
             const res = await api.post("/api/auth/register", payload);
             localStorage.setItem("token", res.data?.token);
+            localStorage.setItem("user", JSON.stringify({
+                id: res.data?.id,
+                username: res.data?.username,
+                email: res.data?.email,
+                name: res.data?.name,
+                surname: res.data?.surname,
+            }));
             setOkMsg("Account created. Welcome to CineBase!");
-            reset({ name: "", surname: "", username: "", email: "", password: "", confirmPassword: "" });
+            reset();
+
         } catch (err) {
-            if (err.fields) {
-                for (const [field, message] of Object.entries(err.fields)) {
-                    setError(field, { type: "server", message: String(message) });
-                }
-                setServerMsg("Please fix the highlighted fields.");
-            } else {
-                setServerMsg(err.message || "Registration failed.");
-            }
+        if (err?.status === 0) {
+            setServerMsg("Cannot reach server. Is the backend running on http://localhost:8080?");
+            return;
         }
-    };
+        if (err.fields) {
+            for (const [field, message] of Object.entries(err.fields)) {
+                setError(field, { type: "server", message: String(message) });
+            }
+            setServerMsg("Please fix the highlighted fields.");
+        } else {
+            setServerMsg(err.message || "Registration failed.");
+        }
+    }
+
+};
 
     return (
         <div className={styles.page}>
