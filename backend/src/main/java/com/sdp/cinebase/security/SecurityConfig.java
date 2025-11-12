@@ -59,7 +59,9 @@ public class SecurityConfig {
         var cfg = new CorsConfiguration();
         cfg.setAllowedOrigins(allowedOrigins);
         cfg.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
-        cfg.setAllowedHeaders(List.of("*"));
+        cfg.setAllowedHeaders(Arrays.asList(
+                "Authorization", "Content-Type", "Accept"
+        ));
         cfg.setAllowCredentials(true);
 
         var source = new UrlBasedCorsConfigurationSource();

@@ -1,7 +1,7 @@
 :root {
     --bg: #ffffff;
     --ink: #0b0f14;
-    --muted: #6b7280;
+    --muted: #000000;
     --line: #0b0f14;
     --cta: #f2c230;
 }
@@ -115,4 +115,22 @@ body {
     background: #fff7ed;
     color: #9a3412;
     border: 1px solid #fed7aa;
+}
+
+/* ===== FIX: da tekst u registraciji bude CRN ===== */
+.page, .page * { color: var(--ink); }
+
+.field input {
+    color: var(--ink);
+    caret-color: var(--ink);
+    background: #fff;
+}
+.field input::placeholder { color: var(--muted); }
+
+.field input:-webkit-autofill,
+.field input:-webkit-autofill:hover,
+.field input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--ink);
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    caret-color: var(--ink);
 }

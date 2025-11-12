@@ -154,3 +154,23 @@ body {
     color: #166534;
     border: 1px solid #bbf7d0;
 }
+
+
+/* ===== FIX: da tekst u loginu bude CRN ===== */
+.page, .page * { color: var(--ink); }                /* prepiše body {color:#fff} */
+
+.field input {
+    color: var(--ink);                                  /* crna slova u inputu */
+    caret-color: var(--ink);
+    background: #fff;                                   /* bijela pozadina */
+}
+.field input::placeholder { color: var(--muted); }    /* siv placeholder */
+
+/* Chrome autofill (žuta) fix */
+.field input:-webkit-autofill,
+.field input:-webkit-autofill:hover,
+.field input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--ink);
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    caret-color: var(--ink);
+}

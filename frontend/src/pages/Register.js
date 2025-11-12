@@ -3,8 +3,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "../api/axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Register.module.css";
+
+
 
 const schema = z.object({
     name: z.string().min(1, "Name is required").max(50, "Max 50 chars"),
@@ -23,12 +25,12 @@ const schema = z.object({
 });
 
 export default function Register() {
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
         setError,
         formState: { errors, isSubmitting },
-        reset,
     } = useForm({ resolver: zodResolver(schema), mode: "onBlur" });
 
     const [serverMsg, setServerMsg] = useState(null);
@@ -47,17 +49,12 @@ export default function Register() {
         };
 
         try {
-            const res = await api.post("/api/auth/register", payload);
-            localStorage.setItem("token", res.data?.token);
-            localStorage.setItem("user", JSON.stringify({
-                id: res.data?.id,
-                username: res.data?.username,
-                email: res.data?.email,
-                name: res.data?.name,
-                surname: res.data?.surname,
-            }));
-            setOkMsg("Account created. Welcome to CineBase!");
-            reset();
+            await api.post("/api/auth/register", payload);
+              setOkMsg("Account created. Please log in.");
+                          setTimeout(() => {
+                                navigate("/login", { replace: true, state: { email: payload.email } });
+                              }, 500);
+
 
         } catch (err) {
         if (err?.status === 0) {

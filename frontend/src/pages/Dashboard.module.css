@@ -1,0 +1,236 @@
+/* Dashboard Styles */
+
+.dashboard {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: #57676a;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid #15202b;
+}
+
+.brand {
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--brand);
+}
+
+.tabs {
+    display: flex;
+    gap: 12px;
+}
+
+.tabs button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.tabs button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tabs button.active {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Hero Section */
+.hero {
+    background: var(--hero-bg);
+    padding: 30px 20px 22px;
+}
+
+.hero h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    color: #000;
+}
+
+.hero p {
+    color: #333;
+    margin-bottom: 14px;
+}
+
+/* Search Bar */
+.searchbar {
+    margin-top: 14px;
+}
+
+.searchbar input {
+    width: 100%;
+    max-width: 900px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid var(--divider);
+    background: #FFFFFF;
+    color: #000;
+    padding: 0 18px;
+    font-size: 16px;
+}
+
+.searchbar input::placeholder {
+    color: #6b7280;
+}
+
+/* Container */
+.container {
+    padding: 18px 20px;
+    flex: 1;
+}
+
+/* Filters */
+.filters {
+    display: flex;
+    gap: 10px;
+    margin: 12px 0 8px;
+}
+
+.filters button {
+    background: transparent;
+    color: #000;
+    border: 1px solid #000;
+    padding: 10px 35px;
+    border-radius: 2px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.filters button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.filters button.active {
+    background: var(--pill);
+    color: var(--pillText);
+    border-color: var(--pill);
+}
+
+/* Section Header */
+.sectionHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 12px 0 8px;
+}
+
+.sectionTitle {
+    font-size: 22px;
+    color: #000;
+    opacity: 0.9;
+}
+
+.count {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 32px;
+    padding-top: 10px;
+}
+
+@media (max-width: 1200px) {
+    .grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 28px;
+    }
+}
+
+@media (max-width: 992px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+/* Alerts */
+.alert {
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.alert.warn {
+    background: #3a2431;
+    border: 1px solid #5b2f44;
+    color: #ffd7e0;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    margin: 26px 0;
+}
+
+.pagination button {
+    background: #f1f1f1;
+    color: #000;
+    border: 1px solid #d0d0d0;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+    background: #e4e4e4;
+    border-color: #bfbfbf;
+    transform: translateY(-1px);
+}
+
+.pagination button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.pagination span {
+    color: #727272;
+    font-size: 14px;
+    padding: 0 6px;
+}
+
+/* Footer */
+.footer {
+    background: #2b3a49;
+    color: #cfe2f3;
+    text-align: center;
+    padding: 18px;
+    margin-top: 22px;
+    border-top: 1px solid #314457;
+}
