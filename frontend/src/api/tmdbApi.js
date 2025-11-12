@@ -123,7 +123,8 @@ export const MoviesApi = {
     popular:  (page = 1) => backendTmdb("/movies/popular", { page }),
     latest:   (page = 1) => backendTmdb("/movies/latest", { page }),
     topRated: (page = 1) => backendTmdb("/movies/top-rated", { page }),
-    search:   (q, page = 1) => backendTmdb("/movies/search", { q, page })
+    search:   (q, page = 1) => backendTmdb("/movies/search", { q, page }),
+    details:  (id) => backendTmdb(`/movies/${id}`)
 };
 
 /**
@@ -133,7 +134,8 @@ export const TvApi = {
     popular:  (page = 1) => backendTmdb("/tv/popular", { page }),
     latest:   (page = 1) => backendTmdb("/tv/latest", { page }),
     topRated: (page = 1) => backendTmdb("/tv/top-rated", { page }),
-    search:   (q, page = 1) => backendTmdb("/tv/search", { q, page })
+    search:   (q, page = 1) => backendTmdb("/tv/search", { q, page }),
+    details:  (id) => backendTmdb(`/tv/${id}`)
 };
 
 /**

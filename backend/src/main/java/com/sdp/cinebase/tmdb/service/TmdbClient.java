@@ -1,5 +1,6 @@
 package com.sdp.cinebase.tmdb.service;
 
+import com.sdp.cinebase.tmdb.dto.MovieDetailsDto;
 import com.sdp.cinebase.tmdb.dto.MovieDto;
 import com.sdp.cinebase.tmdb.dto.PagedResponse;
 import org.slf4j.Logger;
@@ -297,6 +298,51 @@ public class TmdbClient {
         } catch (Exception e) {
             log.error("Error while fetching combined top-rated (page {}): {}", page, e.getMessage());
             throw new RuntimeException("Failed to fetch combined top-rated: " + e.getMessage(), e);
+        }
+    }
+    // ================================================
+    // MOVIE DETAILS
+    // ================================================
+
+    public MovieDetailsDto getMovieDetails(int movieId) {
+        log.debug("Fetching movie details for id: {}", movieId);
+        try {
+            return client.get()
+                    .uri(uri -> uri.path("/movie/" + movieId)
+                            .queryParam("api_key", apiKey)
+                            .queryParam("language", "en-US")
+                            .queryParam("append_to_response", "credits,videos,reviews")
+                            .build())
+                    .retrieve()
+                    .bodyToMono(MovieDetailsDto.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            log.error("TMDB API error while fetching movie details (id {}): {} - {}",
+                    movieId, e.getStatusCode(), e.getMessage());
+            throw new RuntimeException("Failed to fetch movie details: " + e.getStatusCode(), e);
+        }
+    }
+
+    // ================================================
+    // TV DETAILS
+    // ================================================
+
+    public MovieDetailsDto getTvDetails(int tvId) {
+        log.debug("Fetching TV show details for id: {}", tvId);
+        try {
+            return client.get()
+                    .uri(uri -> uri.path("/tv/" + tvId)
+                            .queryParam("api_key", apiKey)
+                            .queryParam("language", "en-US")
+                            .queryParam("append_to_response", "credits,videos,reviews")
+                            .build())
+                    .retrieve()
+                    .bodyToMono(MovieDetailsDto.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            log.error("TMDB API error while fetching TV details (id {}): {} - {}",
+                    tvId, e.getStatusCode(), e.getMessage());
+            throw new RuntimeException("Failed to fetch TV details: " + e.getStatusCode(), e);
         }
     }
 }

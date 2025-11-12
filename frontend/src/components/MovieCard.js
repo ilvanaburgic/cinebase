@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { imgUrl, ConfigApi } from "../api/tmdbApi";
 
 /**
@@ -17,6 +18,8 @@ import { imgUrl, ConfigApi } from "../api/tmdbApi";
 
 /** @param {{ m?: TmdbItem }} props */
 export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
+    const navigate = useNavigate();
+
     useEffect(() => { void ConfigApi.loadOnce(); }, []);
 
     // MEDIA TYPE
@@ -40,8 +43,12 @@ export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
     // RATING
     const rating = Number(m.vote_average || 0).toFixed(1);
 
+    const handleClick = () => {
+        navigate(`/${media}/${m.id}`);
+    };
+
     return (
-        <div className="movie-card">
+        <div className="movie-card" onClick={handleClick} style={{ cursor: "pointer" }}>
             <div className="thumb">
                 {poster ? (
                     <img src={poster} alt={title}/>
@@ -65,8 +72,20 @@ export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
             </div>
 
             <div className="card-actions">
-                <button className="pill" type="button">Rate</button>
-                <button className="pill" type="button">♡</button>
+                <button
+                    className="pill"
+                    type="button"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    Rate
+                </button>
+                <button
+                    className="pill"
+                    type="button"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    ♡
+                </button>
             </div>
         </div>
     );

@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import MovieDetails from "./pages/MovieDetails";
 import "./styles/global.css";
 import "./styles/token.css";
 import "./styles/layout.css";
@@ -18,6 +19,8 @@ export default function App() {
                     <Route path="/register" element={<Register />} />
                     <Route element={<ProtectedRoute />}>
                         <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/movie/:id" element={<MovieDetails />} />
+                        <Route path="/tv/:id" element={<MovieDetails />} />
                     </Route>
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>

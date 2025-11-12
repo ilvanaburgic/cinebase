@@ -1,5 +1,6 @@
 package com.sdp.cinebase.tmdb.web;
 
+import com.sdp.cinebase.tmdb.dto.MovieDetailsDto;
 import com.sdp.cinebase.tmdb.dto.MovieDto;
 import com.sdp.cinebase.tmdb.dto.PagedResponse;
 import com.sdp.cinebase.tmdb.service.TmdbClient;
@@ -89,6 +90,7 @@ public class TmdbProxyController {
     // ================================================
     // FEED (COMBINED MOVIES + TV SHOWS)
     // ================================================
+
     @GetMapping("/feed/popular")
     public PagedResponse<MovieDto> feedPopular(@RequestParam(defaultValue = "1") int page) {
         // Trending today - mix of popular movies and TV shows
@@ -105,5 +107,23 @@ public class TmdbProxyController {
     public PagedResponse<MovieDto> feedTopRated(@RequestParam(defaultValue = "1") int page) {
         // Combined top-rated movies and TV shows, sorted by rating
         return tmdb.combinedTopRated(page);
+    }
+
+    // ================================================
+    // MOVIE DETAILS
+    // ================================================
+
+    @GetMapping("/movies/{id}")
+    public MovieDetailsDto getMovieDetails(@PathVariable int id) {
+        return tmdb.getMovieDetails(id);
+    }
+
+    // ================================================
+    // TV DETAILS
+    // ================================================
+
+    @GetMapping("/tv/{id}")
+    public MovieDetailsDto getTvDetails(@PathVariable int id) {
+        return tmdb.getTvDetails(id);
     }
 }

@@ -6,11 +6,20 @@ import MovieCard from "../components/MovieCard";
 import SkeletonCard from "../components/SkeletonCard";
 import { ConfigApi, FeedApi, MoviesApi, TvApi, MultiApi } from "../api/tmdbApi";
 
+/**
+ * @typedef {Object} TMDBPagedResponse
+ * @property {Array} results
+ * @property {number} total_results
+ * @property {number} total_pages
+ * @property {number} page
+ */
+
 export default function Dashboard() {
     const [scope, setScope] = useState("feed");
     const [tab, setTab] = useState("popular");
     const [q, setQ] = useState("");
     const [page, setPage] = useState(1);
+    /** @type {[TMDBPagedResponse | null, Function]} */
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [err, setErr] = useState("");
