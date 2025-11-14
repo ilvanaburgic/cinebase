@@ -227,11 +227,7 @@ export default function MovieDetails() {
                                 <button
                                     key={season.id}
                                     className={styles.seasonItem}
-                                    onClick={() => {
-                                        // Navigate to season details or show more info
-                                        // For now, this could be expanded to a full season details page
-                                        alert(`Season ${season.season_number} details - Coming soon!`);
-                                    }}
+                                    onClick={() => navigate(`/tv/${id}/season/${season.season_number}`)}
                                     type="button"
                                 >
                                     <div className={styles.seasonNumber}>Season {season.season_number}</div>
@@ -251,7 +247,10 @@ export default function MovieDetails() {
                     <h2>Cast</h2>
                     <div className={styles.castGrid}>
                         {cast.map(actor => (
-                            <div key={actor.id} className={styles.castCard}>
+                            <div key={actor.id} className={styles.castCard}
+                                 onClick={() => navigate(`/person/${actor.id}`)}
+                                 style={{ cursor: 'pointer' }}
+                            >
                                 {actor.profile_path ? (
                                     <img
                                         src={imgUrl(actor.profile_path, "w185")}

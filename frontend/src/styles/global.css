@@ -20,11 +20,11 @@ body { background: var(--bg); color: var(--text); font-family: system-ui,-apple-
 /* NAVBAR */
 .navbar{
     display:flex; align-items:center; justify-content:space-between;
-    padding:14px 20px; background: #57676a; position:sticky; top:0; z-index:40;
+    padding:16px 20px; background: #57676a; position:sticky; top:0; z-index:40;
     border-bottom:1px solid #15202b;
 }
-.navbar .brand{ font-weight:800; letter-spacing:1px; color:var(--brand); }
-.navbar .tabs button{ background:none; border:none; color:var(--muted); margin:0 12px; text-decoration:none; font-weight:600; cursor:pointer; padding:4px 8px; }
+.navbar .brand{ font-weight:800; font-size:20px; letter-spacing:1px; color:var(--brand); }
+.navbar .tabs button{ background:none; border:none; color:var(--muted); margin:0 16px; text-decoration:none; font-weight:600; cursor:pointer; padding:8px 14px; font-size:17px; }
 .navbar .tabs button.active{ color:var(--text); }
 .navbar .tabs button:hover{ color:var(--text); }
 .navbar .user{ display:flex; gap:10px; align-items:center; }
@@ -102,9 +102,10 @@ body { background: var(--bg); color: var(--text); font-family: system-ui,-apple-
 
 
 /* HERO */
-.hero{ background:var(--hero-bg); padding:30px 20px 22px; }
-.hero h1{ margin:0 0 8px; font-size:28px; }
-.searchbar{ margin-top:14px; }
+.hero{ background:var(--hero-bg); padding:50px 20px 40px; }
+.hero h1{ margin:0 0 12px; font-size:42px; }
+.hero p{ font-size:18px; margin:0 0 6px; }
+.searchbar{ margin-top:20px; }
 .searchbar input{
     width:100%; max-width:900px; height:44px; border-radius:999px; border:1px solid var(--divider);
     background:#FFFFFF; color:var(--text); padding:0 18px;

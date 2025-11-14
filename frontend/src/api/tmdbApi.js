@@ -135,7 +135,12 @@ export const TvApi = {
     latest:   (page = 1) => backendTmdb("/tv/latest", { page }),
     topRated: (page = 1) => backendTmdb("/tv/top-rated", { page }),
     search:   (q, page = 1) => backendTmdb("/tv/search", { q, page }),
-    details:  (id) => backendTmdb(`/tv/${id}`)
+    details:  (id) => backendTmdb(`/tv/${id}`),
+    season:   (id, seasonNumber) => backendTmdb(`/tv/${id}/season/${seasonNumber}`)
+};
+
+export const PeopleApi = {
+    details: (id) => backendTmdb(`/person/${id}`)
 };
 
 /**

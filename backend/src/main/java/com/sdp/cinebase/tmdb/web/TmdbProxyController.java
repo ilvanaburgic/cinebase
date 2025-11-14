@@ -1,8 +1,6 @@
 package com.sdp.cinebase.tmdb.web;
 
-import com.sdp.cinebase.tmdb.dto.MovieDetailsDto;
-import com.sdp.cinebase.tmdb.dto.MovieDto;
-import com.sdp.cinebase.tmdb.dto.PagedResponse;
+import com.sdp.cinebase.tmdb.dto.*;
 import com.sdp.cinebase.tmdb.service.TmdbClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -125,5 +123,18 @@ public class TmdbProxyController {
     @GetMapping("/tv/{id}")
     public MovieDetailsDto getTvDetails(@PathVariable int id) {
         return tmdb.getTvDetails(id);
+    }
+
+    @GetMapping("/tv/{id}/season/{seasonNumber}")
+    public SeasonDetailsDto getSeasonDetails(
+            @PathVariable int id,
+            @PathVariable int seasonNumber
+    ) {
+        return tmdb.getSeasonDetails(id, seasonNumber);
+    }
+
+    @GetMapping("/person/{id}")
+    public PersonDetailsDto getPersonDetails(@PathVariable int id) {
+        return tmdb.getPersonDetails(id);
     }
 }

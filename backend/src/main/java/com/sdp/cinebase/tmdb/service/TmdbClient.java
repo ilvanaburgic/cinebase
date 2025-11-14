@@ -1,8 +1,6 @@
 package com.sdp.cinebase.tmdb.service;
 
-import com.sdp.cinebase.tmdb.dto.MovieDetailsDto;
-import com.sdp.cinebase.tmdb.dto.MovieDto;
-import com.sdp.cinebase.tmdb.dto.PagedResponse;
+import com.sdp.cinebase.tmdb.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -343,6 +341,43 @@ public class TmdbClient {
             log.error("TMDB API error while fetching TV details (id {}): {} - {}",
                     tvId, e.getStatusCode(), e.getMessage());
             throw new RuntimeException("Failed to fetch TV details: " + e.getStatusCode(), e);
+        }
+    }
+
+    public SeasonDetailsDto getSeasonDetails(int tvId, int seasonNumber) {
+        log.debug("Fetching season details for TV {} season {}", tvId, seasonNumber);
+        try {
+            return client.get()
+                    .uri(uri -> uri.path("/tv/" + tvId + "/season/" + seasonNumber)
+                            .queryParam("api_key", apiKey)
+                            .queryParam("language", "en-US")
+                            .build())
+                    .retrieve()
+                    .bodyToMono(SeasonDetailsDto.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            log.error("TMDB API error while fetching season details (TV {}, season {}): {} - {}",
+                    tvId, seasonNumber, e.getStatusCode(), e.getMessage());
+            throw new RuntimeException("Failed to fetch season details: " + e.getStatusCode(), e);
+        }
+    }
+
+    public PersonDetailsDto getPersonDetails(int personId) {
+        log.debug("Fetching person details for id: {}", personId);
+        try {
+            return client.get()
+                    .uri(uri -> uri.path("/person/" + personId)
+                            .queryParam("api_key", apiKey)
+                            .queryParam("language", "en-US")
+                            .queryParam("append_to_response", "movie_credits,tv_credits")
+                            .build())
+                    .retrieve()
+                    .bodyToMono(PersonDetailsDto.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            log.error("TMDB API error while fetching person details (id {}): {} - {}",
+                    personId, e.getStatusCode(), e.getMessage());
+            throw new RuntimeException("Failed to fetch person details: " + e.getStatusCode(), e);
         }
     }
 }

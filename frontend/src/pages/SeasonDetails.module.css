@@ -1,0 +1,110 @@
+.page {
+    min-height: 100vh;
+    background: #f5f5f5;
+}
+
+.loading, .error {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.header {
+    background: #98b5b9;
+    padding: 30px 40px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.backBtn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.backBtn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+.episodes {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.episodeCard {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.episodeImage {
+    flex-shrink: 0;
+    width: 300px;
+    height: 169px;
+}
+
+.episodeImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.placeholder {
+    width: 100%;
+    height: 100%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.episodeInfo {
+    padding: 20px;
+    flex: 1;
+}
+
+.episodeInfo h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+.episodeMeta {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.episodeInfo p {
+    line-height: 1.6;
+    color: #444;
+}
+
+.footer {
+    background: #2b3a49;
+    color: #cfe2f3;
+    text-align: center;
+    padding: 18px;
+    margin-top: 40px;
+}
