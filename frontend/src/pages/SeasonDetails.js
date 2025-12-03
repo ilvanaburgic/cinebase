@@ -43,9 +43,6 @@ export default function SeasonDetails() {
             <Navbar active="tv" onTab={() => navigate('/dashboard')} />
 
             <header className={styles.header}>
-                <button className={styles.backBtn} onClick={() => navigate(`/tv/${id}`)}>
-                    ← Back to Show
-                </button>
                 <h1>{data.name}</h1>
             </header>
 

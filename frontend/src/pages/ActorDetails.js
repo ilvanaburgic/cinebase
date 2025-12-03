@@ -41,9 +41,6 @@ export default function ActorDetails() {
             <Navbar active="movies" onTab={() => navigate('/dashboard')} />
 
             <section className={styles.hero}>
-                <button className={styles.backBtn} onClick={() => navigate(-1)}>
-                    ← Back
-                </button>
 
                 <div className={styles.content}>
                     <div className={styles.profileWrapper}>

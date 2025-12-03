@@ -74,15 +74,25 @@ public class TmdbProxyController {
     }
 
     // ================================================
-    // MULTI SEARCH
+    // MULTI SEARCH (MOVIES + TV SHOWS)
     // ================================================
 
+    /**
+     * Multi-search endpoint that searches both movies and TV shows.
+     * <p>
+     * Uses TMDB's /search/multi API which returns both movies and TV shows
+     * in a single request, mixed together in the results.
+     *
+     * @param q the search query string
+     * @param page the page number (default 1)
+     * @return paginated response with both movies and TV shows
+     */
     @GetMapping("/multi/search")
     public PagedResponse<MovieDto> multiSearch(
             @RequestParam String q,
             @RequestParam(defaultValue = "1") int page
     ) {
-        return tmdb.searchMovies(q, page);
+        return tmdb.searchMulti(q, page);
     }
 
     // ================================================
@@ -97,8 +107,8 @@ public class TmdbProxyController {
 
     @GetMapping("/feed/latest")
     public PagedResponse<MovieDto> feedLatest(@RequestParam(defaultValue = "1") int page) {
-        // Trending this week - recent popular content
-        return tmdb.trendingWeek(page);
+        // Combined latest movies and TV shows, sorted by release date
+        return tmdb.combinedLatest(page);
     }
 
     @GetMapping("/feed/top-rated")

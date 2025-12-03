@@ -4,7 +4,7 @@ export default function SearchBar({ value, onChange, onSubmit }) {
             <input
                 type="text"
                 aria-label="Search"
-                placeholder="Search for movie, TV show, person"
+                placeholder="Search for movie, TV show"
                 value={value}
                 onChange={(e)=>onChange(e.target.value)}
             />
