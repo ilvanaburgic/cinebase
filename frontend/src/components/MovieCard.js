@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { imgUrl, ConfigApi } from "../api/tmdbApi";
+import api from "../api/axios";
+import ConfirmationModal from "./ConfirmationModal";
 
 /**
  * @typedef {{
@@ -19,6 +21,7 @@ import { imgUrl, ConfigApi } from "../api/tmdbApi";
 /** @param {{ m?: TmdbItem }} props */
 export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
     const navigate = useNavigate();
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     useEffect(() => { void ConfigApi.loadOnce(); }, []);
 
@@ -45,6 +48,31 @@ export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
 
     const handleClick = () => {
         navigate(`/${media}/${m.id}`);
+    };
+
+    const handleAddToFavorites = async (e) => {
+        e.stopPropagation();
+
+        try {
+            await api.post("/api/favorites", {
+                tmdbId: m.id,
+                mediaType: media,
+                title: title,
+                posterPath: m.poster_path
+            });
+
+            setShowSuccessModal(true);
+        } catch (err) {
+            const status = err?.status ?? err?.response?.status ?? 0;
+
+            if (status === 409) {
+                alert("Already in your favorites!");
+            } else if (status === 0) {
+                alert("Cannot reach server. Is the backend running?");
+            } else {
+                alert("Failed to add to favorites");
+            }
+        }
     };
 
     return (
@@ -82,11 +110,19 @@ export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
                 <button
                     className="pill"
                     type="button"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={handleAddToFavorites}
                 >
                     ♡
                 </button>
             </div>
+
+            {/* Success Modal */}
+            {showSuccessModal && (
+                <ConfirmationModal
+                    message={`"${title}" has been added to your favorites!`}
+                    onClose={() => setShowSuccessModal(false)}
+                />
+            )}
         </div>
     );
 }

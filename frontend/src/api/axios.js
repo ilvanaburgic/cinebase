@@ -16,8 +16,11 @@ api.interceptors.response.use(
     (error) => {
         const data = error?.response?.data || {};
         const status = error?.response?.status ?? 0;
+        const url = error?.config?.url || "";
 
-        if (status === 401) {
+        // Don't auto-logout on 401 for change-password endpoint
+        // (401 means wrong current password, not invalid token)
+        if (status === 401 && !url.includes("/change-password")) {
             localStorage.removeItem("token");
             if (window.location.pathname !== "/login") {
                 window.location.replace("/login");

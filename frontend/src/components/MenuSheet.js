@@ -67,7 +67,7 @@ export default function MenuSheet() {
 
             {open && (
                 <div ref={sheetRef} className="menu-sheet" role="menu">
-                    <Item icon={IcUser}  disabled>Profile</Item>
+                    <Item icon={IcUser} href="/profile">Profile</Item>
                     <Item icon={IcBm}    disabled>Watchlist</Item>
                     <Item icon={IcHeart} disabled>Favorites</Item>
                     <Item icon={IcStar}  disabled>Ratings</Item>

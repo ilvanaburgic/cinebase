@@ -68,7 +68,8 @@ public class AuthService {
                     saved.getUsername(),
                     saved.getEmail(),
                     saved.getName(),
-                    saved.getSurname()
+                    saved.getSurname(),
+                    saved.getCreatedAt()
             );
         } catch (Exception e) {
             log.error("Registration failed for username: {}", username, e);
@@ -107,13 +108,49 @@ public class AuthService {
                     user.getUsername(),
                     user.getEmail(),
                     user.getName(),
-                    user.getSurname()
+                    user.getSurname(),
+                    user.getCreatedAt()
             );
         } catch (ResponseStatusException e) {
             throw e; // Re-throw expected exceptions
         } catch (Exception e) {
             log.error("Login failed for identifier: {}", id, e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Login failed");
+        }
+    }
+
+    public void changePassword(Long userId, String currentPassword, String newPassword) {
+        log.info("Password change attempt for user ID: {}", userId);
+
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> {
+                        log.error("User not found for ID: {}", userId);
+                        return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+                    });
+
+            // Verify current password
+            if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
+                log.warn("Password change failed: Invalid current password for user ID: {}", userId);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Current password is incorrect");
+            }
+
+            // Check that new password is different from current password
+            if (currentPassword.equals(newPassword)) {
+                log.warn("Password change failed: New password is same as current password for user ID: {}", userId);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password must be different from current password");
+            }
+
+            // Update to new password
+            user.setPasswordHash(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+
+            log.info("Password changed successfully for user ID: {}", userId);
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Password change failed for user ID: {}", userId, e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to change password");
         }
     }
 }

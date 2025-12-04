@@ -1,6 +1,7 @@
 package com.sdp.cinebase.auth.web;
 
 import com.sdp.cinebase.auth.dto.AuthResponse;
+import com.sdp.cinebase.auth.dto.ChangePasswordRequest;
 import com.sdp.cinebase.auth.dto.LoginRequest;
 import com.sdp.cinebase.auth.dto.RegisterRequest;
 import com.sdp.cinebase.auth.service.AuthService;
@@ -39,5 +40,13 @@ public class AuthController {
     @GetMapping("/me")
     public UserDto me(@AuthenticationPrincipal UserPrincipal me) {
         return userService.getById(me.getId());
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<Void> changePassword(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @Valid @RequestBody ChangePasswordRequest req) {
+        authService.changePassword(Long.parseLong(principal.getId()), req.currentPassword(), req.newPassword());
+        return ResponseEntity.ok().build();
     }
 }

@@ -89,6 +89,9 @@ body { background: var(--bg); color: var(--text); font-family: system-ui,-apple-
 }
 .menu-item .mi-text{ flex:1; }
 
+/* Reset link styles in menu */
+.menu-item{ text-decoration:none; font-weight:normal; font-size:inherit; }
+
 /* Menu separator */
 .menu-sep{
     height:1px; border:0; margin:6px 8px;

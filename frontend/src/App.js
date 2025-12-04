@@ -6,10 +6,13 @@ import Dashboard from "./pages/Dashboard";
 import MovieDetails from "./pages/MovieDetails";
 import SeasonDetails from "./pages/SeasonDetails";
 import ActorDetails from "./pages/ActorDetails";
+import Profile from './pages/Profile';
+import Favorites from './pages/Favorites';
 import "./styles/global.css";
 import "./styles/token.css";
 import "./styles/layout.css";
 import ProtectedRoute from "./routes/ProtectedRoute";
+
 
 export default function App() {
     return (
@@ -25,6 +28,8 @@ export default function App() {
                         <Route path="/tv/:id" element={<MovieDetails />} />
                         <Route path="/tv/:id/season/:seasonNumber" element={<SeasonDetails />} />
                         <Route path="/person/:id" element={<ActorDetails />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/favorites" element={<Favorites />} />
                     </Route>
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>

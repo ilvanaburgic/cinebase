@@ -36,6 +36,7 @@ export default function Login() {
                 email: data.email,
                 name: data.name,
                 surname: data.surname,
+                createdAt: data.createdAt,
             };
             login(userObj, data.token);
 
