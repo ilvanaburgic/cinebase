@@ -69,7 +69,7 @@ export default function MenuSheet() {
                 <div ref={sheetRef} className="menu-sheet" role="menu">
                     <Item icon={IcUser} href="/profile">Profile</Item>
                     <Item icon={IcBm}    disabled>Watchlist</Item>
-                    <Item icon={IcHeart} disabled>Favorites</Item>
+                    <Item icon={IcHeart} href="/favorites">Favorites</Item>
                     <Item icon={IcStar}  disabled>Ratings</Item>
                     <Item icon={IcGame}  disabled>Higher / Lower game</Item>
                     <Item icon={IcLead}  disabled>Leaderboard</Item>

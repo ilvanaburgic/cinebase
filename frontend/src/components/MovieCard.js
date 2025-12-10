@@ -22,6 +22,7 @@ import ConfirmationModal from "./ConfirmationModal";
 export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
     const navigate = useNavigate();
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [showAlreadyModal, setShowAlreadyModal] = useState(false);
 
     useEffect(() => { void ConfigApi.loadOnce(); }, []);
 
@@ -66,7 +67,7 @@ export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
             const status = err?.status ?? err?.response?.status ?? 0;
 
             if (status === 409) {
-                alert("Already in your favorites!");
+                setShowAlreadyModal(true);
             } else if (status === 0) {
                 alert("Cannot reach server. Is the backend running?");
             } else {
@@ -121,6 +122,17 @@ export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
                 <ConfirmationModal
                     message={`"${title}" has been added to your favorites!`}
                     onClose={() => setShowSuccessModal(false)}
+                />
+            )}
+
+            {/* Already in Favorites Modal */}
+            {showAlreadyModal && (
+                <ConfirmationModal
+                    type="confirm"
+                    message={`"${title}" is already in your favorites!`}
+                    confirmText="OK"
+                    onConfirm={() => setShowAlreadyModal(false)}
+                    onClose={() => setShowAlreadyModal(false)}
                 />
             )}
         </div>
