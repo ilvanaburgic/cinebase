@@ -106,6 +106,64 @@
     color: #333;
 }
 
+.reviewsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.reviewsHeader h2 {
+    margin-bottom: 0;
+}
+
+.editReviewBtn,
+.writeReviewBtn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.writeReviewBtn {
+    background: #f2c230;
+    color: #0b0f14;
+}
+
+.writeReviewBtn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(242, 194, 48, 0.3);
+}
+
+.editReviewBtn {
+    background: rgba(11, 15, 20, 0.1);
+    color: #0b0f14;
+    border: 2px solid rgba(11, 15, 20, 0.2);
+}
+
+.editReviewBtn:hover {
+    background: rgba(11, 15, 20, 0.15);
+    border-color: rgba(11, 15, 20, 0.3);
+}
+
+.reviewsSubheading {
+    font-size: 20px;
+    font-weight: 600;
+    color: #555;
+    margin: 32px 0 16px;
+}
+
+.edited {
+    font-style: italic;
+    color: #999;
+}
+
 .trailerWrapper {
     border-radius: 12px;
     overflow: hidden;

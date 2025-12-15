@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import SearchBar from "../components/SearchBar";
 import Filters from "../components/Filters";
@@ -15,7 +16,10 @@ import { ConfigApi, FeedApi, MoviesApi, TvApi, MultiApi } from "../api/tmdbApi";
  */
 
 export default function Dashboard() {
-    const [scope, setScope] = useState("feed");
+    const [searchParams] = useSearchParams();
+    const initialScope = searchParams.get("scope") || "feed";
+
+    const [scope, setScope] = useState(initialScope);
     const [tab, setTab] = useState("popular");
     const [q, setQ] = useState("");
     const [page, setPage] = useState(1);
@@ -27,6 +31,14 @@ export default function Dashboard() {
     useEffect(() => {
         void ConfigApi.loadOnce();
     }, []);
+
+    // Update scope when URL changes
+    useEffect(() => {
+        const urlScope = searchParams.get("scope");
+        if (urlScope && (urlScope === "feed" || urlScope === "movies" || urlScope === "tv")) {
+            setScope(urlScope);
+        }
+    }, [searchParams]);
 
     const title = useMemo(() => {
         if (q) return `Results for "${q}"`;

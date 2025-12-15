@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MoviesApi, TvApi, imgUrl } from "../api/tmdbApi";
 import Navbar from "../components/Navbar";
+import api from "../api/axios";
 import styles from "./MovieDetails.module.css";
 
 /**
@@ -94,6 +95,8 @@ export default function MovieDetails() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [userReviews, setUserReviews] = useState([]);
+    const [myReview, setMyReview] = useState(null);
 
     useEffect(() => {
         async function fetchDetails() {
@@ -105,13 +108,36 @@ export default function MovieDetails() {
                     : await MoviesApi.details(id);
                 setData(response);
             } catch (err) {
-                console.error("Error fetching details:", err);
+                // Failed to fetch details
                 setError("Failed to load details");
             } finally {
                 setLoading(false);
             }
         }
+
+        async function fetchUserReviews() {
+            try {
+                const { data } = await api.get(`/api/reviews/${id}/${type}`);
+                setUserReviews(data);
+            } catch (err) {
+                // Failed to fetch user reviews
+                setUserReviews([]);
+            }
+        }
+
+        async function fetchMyReview() {
+            try {
+                const { data } = await api.get(`/api/reviews/my/${id}/${type}`);
+                setMyReview(data);
+            } catch (err) {
+                // No review from this user
+                setMyReview(null);
+            }
+        }
+
         void fetchDetails();
+        void fetchUserReviews();
+        void fetchMyReview();
     }, [id, type]);
 
     if (loading) {
@@ -274,35 +300,95 @@ export default function MovieDetails() {
 
             {/* Reviews */}
             <section className={styles.reviewsSection}>
-                <h2>Reviews</h2>
-                {reviews.length > 0 ? (
-                    <div className={styles.reviewsList}>
-                        {reviews.map(review => (
-                            <div key={review.id} className={styles.reviewCard}>
-                                <div className={styles.reviewHeader}>
-                                    <strong className={styles.reviewAuthor}>{review.author}</strong>
-                                    {review.author_details?.rating && (
-                                        <span className={styles.reviewRating}>★ {review.author_details.rating.toFixed(1)}</span>
+                <div className={styles.reviewsHeader}>
+                    <h2>Reviews</h2>
+                    {myReview ? (
+                        <button
+                            className={styles.editReviewBtn}
+                            onClick={() => navigate(`/review/${type}/${id}?title=${encodeURIComponent(title)}`)}
+                        >
+                            Edit Your Review
+                        </button>
+                    ) : (
+                        <button
+                            className={styles.writeReviewBtn}
+                            onClick={() => navigate(`/review/${type}/${id}?title=${encodeURIComponent(title)}`)}
+                        >
+                            Write a Review
+                        </button>
+                    )}
+                </div>
+
+                {/* User Reviews */}
+                {userReviews.length > 0 && (
+                    <>
+                        <h3 className={styles.reviewsSubheading}>User Reviews</h3>
+                        <div className={styles.reviewsList}>
+                            {userReviews.map(review => (
+                                <div key={review.id} className={styles.reviewCard}>
+                                    <div className={styles.reviewHeader}>
+                                        <strong className={styles.reviewAuthor}>{review.username}</strong>
+                                        {review.rating && (
+                                            <span className={styles.reviewRating}>★ {review.rating}/10</span>
+                                        )}
+                                    </div>
+                                    {review.reviewText && (
+                                        <p className={styles.reviewContent}>
+                                            {review.reviewText.length > 400
+                                                ? `${review.reviewText.substring(0, 400)}...`
+                                                : review.reviewText}
+                                        </p>
                                     )}
+                                    <div className={styles.reviewDate}>
+                                        {new Date(review.createdAt).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric"
+                                        })}
+                                        {review?.updatedAt && review?.updatedAt !== review?.createdAt && (
+                                            <span className={styles.edited}> (edited)</span>
+                                        )}
+                                    </div>
                                 </div>
-                                <p className={styles.reviewContent}>
-                                    {review.content.length > 400
-                                        ? `${review.content.substring(0, 400)}...`
-                                        : review.content}
-                                </p>
-                                <div className={styles.reviewDate}>
-                                    {new Date(review.created_at).toLocaleDateString("en-US", {
-                                        year: "numeric",
-                                        month: "long",
-                                        day: "numeric"
-                                    })}
+                            ))}
+                        </div>
+                    </>
+                )}
+
+                {/* TMDB Reviews */}
+                {reviews.length > 0 && (
+                    <>
+                        <h3 className={styles.reviewsSubheading}>TMDB Reviews</h3>
+                        <div className={styles.reviewsList}>
+                            {reviews.map(review => (
+                                <div key={review.id} className={styles.reviewCard}>
+                                    <div className={styles.reviewHeader}>
+                                        <strong className={styles.reviewAuthor}>{review.author}</strong>
+                                        {review.author_details?.rating && (
+                                            <span className={styles.reviewRating}>★ {review.author_details.rating.toFixed(1)}</span>
+                                        )}
+                                    </div>
+                                    <p className={styles.reviewContent}>
+                                        {review.content.length > 400
+                                            ? `${review.content.substring(0, 400)}...`
+                                            : review.content}
+                                    </p>
+                                    <div className={styles.reviewDate}>
+                                        {new Date(review.created_at).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric"
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
+                            ))}
+                        </div>
+                    </>
+                )}
+
+                {userReviews.length === 0 && reviews.length === 0 && (
                     <p className={styles.reviewsPlaceholder}>
-                        No reviews available yet.
+                        No reviews available yet. Be the first to write one!
                     </p>
                 )}
             </section>

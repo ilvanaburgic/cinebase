@@ -17,7 +17,7 @@ export default function ActorDetails() {
                 const response = await PeopleApi.details(id);
                 setData(response);
             } catch (err) {
-                console.error("Error fetching actor:", err);
+                // Failed to fetch actor details
             } finally {
                 setLoading(false);
             }
@@ -28,12 +28,14 @@ export default function ActorDetails() {
     if (loading) return <div className={styles.loading}>Loading...</div>;
     if (!data) return <div className={styles.error}>Actor not found</div>;
 
-    const profileImg = imgUrl(data.profile_path, "h632");
+    const profileImg = imgUrl(data?.profile_path, "h632");
 
     // Combine movies and TV shows, sort by popularity
+    const movieCredits = data?.movie_credits?.cast || [];
+    const tvCredits = data?.tv_credits?.cast || [];
     const allCredits = [
-        ...(data.movie_credits?.cast || []).map(c => ({ ...c, media_type: "movie" })),
-        ...(data.tv_credits?.cast || []).map(c => ({ ...c, media_type: "tv" }))
+        ...movieCredits.map(c => ({ ...c, media_type: "movie" })),
+        ...tvCredits.map(c => ({ ...c, media_type: "tv" }))
     ].sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0)).slice(0, 20);
 
     return (
@@ -45,33 +47,33 @@ export default function ActorDetails() {
                 <div className={styles.content}>
                     <div className={styles.profileWrapper}>
                         {profileImg ? (
-                            <img src={profileImg} alt={data.name} className={styles.profile} />
+                            <img src={profileImg} alt={data?.name || 'Actor'} className={styles.profile} />
                         ) : (
                             <div className={styles.profilePlaceholder}>?</div>
                         )}
                     </div>
 
                     <div className={styles.info}>
-                        <h1 className={styles.name}>{data.name}</h1>
+                        <h1 className={styles.name}>{data?.name || 'Unknown'}</h1>
 
                         <div className={styles.meta}>
-                            {data.known_for_department && (
-                                <span><strong>Known for:</strong> {data.known_for_department}</span>
+                            {data?.known_for_department && (
+                                <span><strong>Known for:</strong> {data?.known_for_department}</span>
                             )}
-                            {data.birthday && (
-                                <span><strong>Born:</strong> {new Date(data.birthday).toLocaleDateString()}</span>
+                            {data?.birthday && (
+                                <span><strong>Born:</strong> {new Date(data?.birthday).toLocaleDateString()}</span>
                             )}
-                            {data.place_of_birth && (
-                                <span><strong>Place of birth:</strong> {data.place_of_birth}</span>
+                            {data?.place_of_birth && (
+                                <span><strong>Place of birth:</strong> {data?.place_of_birth}</span>
                             )}
                         </div>
 
-                        {data.biography && (
+                        {data?.biography && (
                             <div className={styles.biography}>
                                 <h2>Biography</h2>
-                                <p>{data.biography.length > 600
-                                    ? `${data.biography.substring(0, 600)}...`
-                                    : data.biography}
+                                <p>{data?.biography.length > 600
+                                    ? `${data?.biography.substring(0, 600)}...`
+                                    : data?.biography}
                                 </p>
                             </div>
                         )}
@@ -84,25 +86,25 @@ export default function ActorDetails() {
                 <h2>Known For</h2>
                 <div className={styles.creditsGrid}>
                     {allCredits.map((credit, idx) => {
-                        const title = credit.title || credit.name;
-                        const date = credit.release_date || credit.first_air_date;
-                        const poster = imgUrl(credit.poster_path, "w342");
+                        const title = credit?.title || credit?.name;
+                        const date = credit?.release_date || credit?.first_air_date;
+                        const poster = imgUrl(credit?.poster_path, "w342");
 
                         return (
                             <div
-                                key={`${credit.id}-${idx}`}
+                                key={`${credit?.id}-${idx}`}
                                 className={styles.creditCard}
-                                onClick={() => navigate(`/${credit.media_type}/${credit.id}`)}
+                                onClick={() => navigate(`/${credit?.media_type}/${credit?.id}`)}
                             >
                                 {poster ? (
-                                    <img src={poster} alt={title} className={styles.poster} />
+                                    <img src={poster} alt={title || 'Movie'} className={styles.poster} />
                                 ) : (
                                     <div className={styles.posterPlaceholder}>No Image</div>
                                 )}
                                 <div className={styles.creditInfo}>
                                     <div className={styles.creditTitle}>{title}</div>
-                                    {credit.character && (
-                                        <div className={styles.creditCharacter}>as {credit.character}</div>
+                                    {credit?.character && (
+                                        <div className={styles.creditCharacter}>as {credit?.character}</div>
                                     )}
                                     {date && (
                                         <div className={styles.creditYear}>

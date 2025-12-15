@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -8,10 +9,12 @@ import SeasonDetails from "./pages/SeasonDetails";
 import ActorDetails from "./pages/ActorDetails";
 import Profile from './pages/Profile';
 import Favorites from './pages/Favorites';
+import Watchlist from './pages/Watchlist';
+import ReviewForm from './pages/ReviewForm';
+import HistoryRatings from './pages/HistoryRatings';
 import "./styles/global.css";
 import "./styles/token.css";
 import "./styles/layout.css";
-import ProtectedRoute from "./routes/ProtectedRoute";
 
 
 export default function App() {
@@ -30,6 +33,9 @@ export default function App() {
                         <Route path="/person/:id" element={<ActorDetails />} />
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/favorites" element={<Favorites />} />
+                        <Route path="/watchlist" element={<Watchlist />} />
+                        <Route path="/review/:mediaType/:tmdbId" element={<ReviewForm />} />
+                        <Route path="/history-ratings" element={<HistoryRatings />} />
                     </Route>
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>

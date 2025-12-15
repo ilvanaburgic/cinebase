@@ -281,9 +281,6 @@ public class TmdbClient {
         return trendingAll(page, "day");
     }
 
-    public PagedResponse<MovieDto> trendingWeek(int page) {
-        return trendingAll(page, "week");
-    }
 
     // ================================================
     // COMBINED TOP RATED (MOVIES + TV)
@@ -312,10 +309,8 @@ public class TmdbClient {
             combined.sort((a, b) -> Double.compare(b.vote_average(), a.vote_average()));
 
             // Limit to 20 results per page (standard TMDB page size)
-            int pageSize = 20;
-            int startIndex = 0;
-            int endIndex = Math.min(combined.size(), pageSize);
-            var results = combined.subList(startIndex, endIndex);
+            int endIndex = Math.min(combined.size(), 20);
+            var results = combined.subList(0, endIndex);
 
             // Create combined response
             return new PagedResponse<>(
@@ -366,10 +361,8 @@ public class TmdbClient {
             });
 
             // Limit to 20 results per page (standard TMDB page size)
-            int pageSize = 20;
-            int startIndex = 0;
-            int endIndex = Math.min(combined.size(), pageSize);
-            var results = combined.subList(startIndex, endIndex);
+            int endIndex = Math.min(combined.size(), 20);
+            var results = combined.subList(0, endIndex);
 
             // Create combined response
             return new PagedResponse<>(

@@ -1,14 +1,14 @@
-package com.sdp.cinebase.favorite.model;
+package com.sdp.cinebase.review.model;
 
 import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.Objects;
 
 @Entity
-@Table(name = "favorites", uniqueConstraints = {
+@Table(name = "reviews", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"user_id", "tmdb_id", "media_type"})
 })
-public class Favorite {
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,31 +26,38 @@ public class Favorite {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "poster_path")
-    private String posterPath;
+    @Column(name = "rating")
+    private Integer rating; // 1-10, nullable (može biti samo review bez ratinga)
 
-    @Column(name = "added_at", nullable = false)
-    private Instant addedAt;
+    @Column(name = "review_text", columnDefinition = "TEXT")
+    private String reviewText;
+
+    @Column(name = "created_at", nullable = false)
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 
     @PrePersist
     protected void onCreate() {
-        if (this.addedAt == null) {
-            this.addedAt = Instant.now();
+        Instant now = Instant.now();
+        if (this.createdAt == null) {
+            this.createdAt = now;
+        }
+        if (this.updatedAt == null) {
+            this.updatedAt = now;
         }
     }
 
-    // Constructors
-    public Favorite() {
-        // Default constructor for JPA
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Instant.now();
     }
 
-    public Favorite(Long userId, Long tmdbId, String mediaType, String title, String posterPath) {
-        this.userId = userId;
-        this.tmdbId = tmdbId;
-        this.mediaType = mediaType;
-        this.title = title;
-        this.posterPath = posterPath;
+    // Constructors
+    public Review() {
     }
+
     // Getters and Setters
     public Long getId() {
         return id;
@@ -92,34 +99,45 @@ public class Favorite {
         this.title = title;
     }
 
-    public String getPosterPath() {
-        return posterPath;
+    public Integer getRating() {
+        return rating;
     }
 
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
-    public Instant getAddedAt() {
-        return addedAt;
+    public String getReviewText() {
+        return reviewText;
     }
 
-    // equals, hashCode, and toString
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        Favorite favorite = (Favorite) o;
-
-        if (id != null && favorite.id != null) {
-            return Objects.equals(id, favorite.id);
+        Review review = (Review) o;
+        if (id != null && review.id != null) {
+            return Objects.equals(id, review.id);
         }
-
-        // If IDs are null, compare by unique constraint fields
-        return Objects.equals(userId, favorite.userId) &&
-               Objects.equals(tmdbId, favorite.tmdbId) &&
-               Objects.equals(mediaType, favorite.mediaType);
+        return Objects.equals(userId, review.userId) &&
+               Objects.equals(tmdbId, review.tmdbId) &&
+               Objects.equals(mediaType, review.mediaType);
     }
 
     @Override
@@ -127,19 +145,20 @@ public class Favorite {
         if (id != null) {
             return Objects.hash(id);
         }
-        // Use unique constraint fields for hashCode
         return Objects.hash(userId, tmdbId, mediaType);
     }
 
     @Override
     public String toString() {
-        return "Favorite{" +
+        return "Review{" +
                 "id=" + id +
                 ", userId=" + userId +
                 ", tmdbId=" + tmdbId +
                 ", mediaType='" + mediaType + '\'' +
                 ", title='" + title + '\'' +
-                ", addedAt=" + addedAt +
+                ", rating=" + rating +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 }

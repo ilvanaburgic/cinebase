@@ -48,15 +48,16 @@ export default function Favorites() {
             const withDetails = await Promise.all(detailsPromises);
             setFavoritesWithDetails(withDetails);
         } catch (err) {
-            console.error("Failed to load favorites:", err);
+            // Failed to load favorites
+            setFavoritesWithDetails([]);
         } finally {
             setLoading(false);
         }
     }, []);
 
     useEffect(() => {
-        ConfigApi.loadOnce();
-        loadFavorites();
+        void ConfigApi.loadOnce();
+        void loadFavorites();
     }, [loadFavorites]);
 
     const handleDelete = async () => {

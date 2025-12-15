@@ -19,7 +19,7 @@ export default function SeasonDetails() {
                 const response = await TvApi.season(id, seasonNumber);
                 setData(response);
             } catch (err) {
-                console.error("Error fetching season:", err);
+                // Failed to fetch season details
                 setError(err?.message || "Failed to load season details");
             } finally {
                 setLoading(false);
@@ -43,27 +43,27 @@ export default function SeasonDetails() {
             <Navbar active="tv" onTab={() => navigate('/dashboard')} />
 
             <header className={styles.header}>
-                <h1>{data.name}</h1>
+                <h1>{data?.name || 'Season'}</h1>
             </header>
 
             <section className={styles.episodes}>
-                {data.episodes?.map(ep => (
-                    <div key={ep.id} className={styles.episodeCard}>
+                {data?.episodes?.map(ep => (
+                    <div key={ep?.id} className={styles.episodeCard}>
                         <div className={styles.episodeImage}>
-                            {ep.still_path ? (
-                                <img src={imgUrl(ep.still_path, "w300")} alt={ep.name} />
+                            {ep?.still_path ? (
+                                <img src={imgUrl(ep.still_path, "w300")} alt={ep?.name || 'Episode'} />
                             ) : (
                                 <div className={styles.placeholder}>No Image</div>
                             )}
                         </div>
                         <div className={styles.episodeInfo}>
-                            <h3>{ep.episode_number}. {ep.name}</h3>
+                            <h3>{ep?.episode_number}. {ep?.name || 'Untitled'}</h3>
                             <div className={styles.episodeMeta}>
-                                {ep.air_date && <span>{ep.air_date}</span>}
-                                {ep.runtime && <span>{ep.runtime} min</span>}
-                                {ep.vote_average && <span>★ {ep.vote_average.toFixed(1)}</span>}
+                                {ep?.air_date && <span>{ep?.air_date}</span>}
+                                {ep?.runtime && <span>{ep?.runtime} min</span>}
+                                {ep?.vote_average && <span>★ {ep?.vote_average.toFixed(1)}</span>}
                             </div>
-                            <p>{ep.overview || "No description available."}</p>
+                            <p>{ep?.overview || "No description available."}</p>
                         </div>
                     </div>
                 ))}
