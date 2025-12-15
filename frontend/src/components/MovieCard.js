@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { imgUrl, ConfigApi } from "../api/tmdbApi";
 import api from "../api/axios";
 import ConfirmationModal from "./ConfirmationModal";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 
 /**
  * @typedef {{
@@ -23,6 +25,8 @@ export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
     const navigate = useNavigate();
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [showAlreadyModal, setShowAlreadyModal] = useState(false);
+    const [showWatchlistSuccessModal, setShowWatchlistSuccessModal] = useState(false);
+    const [showWatchlistAlreadyModal, setShowWatchlistAlreadyModal] = useState(false);
 
     useEffect(() => { void ConfigApi.loadOnce(); }, []);
 
@@ -76,6 +80,31 @@ export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
         }
     };
 
+    const handleAddToWatchlist = async (e) => {
+        e.stopPropagation();
+
+        try {
+            await api.post("/api/watchlist", {
+                tmdbId: m.id,
+                mediaType: media,
+                title: title,
+                posterPath: m.poster_path
+            });
+
+            setShowWatchlistSuccessModal(true);
+        } catch (err) {
+            const status = err?.status ?? err?.response?.status ?? 0;
+
+            if (status === 409) {
+                setShowWatchlistAlreadyModal(true);
+            } else if (status === 0) {
+                alert("Cannot reach server. Is the backend running?");
+            } else {
+                alert("Failed to add to watchlist");
+            }
+        }
+    };
+
     return (
         <div className="movie-card" onClick={handleClick} style={{ cursor: "pointer" }}>
             <div className="thumb">
@@ -104,7 +133,10 @@ export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
                 <button
                     className="pill"
                     type="button"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/review/${media}/${m.id}?title=${encodeURIComponent(title)}`);
+                    }}
                 >
                     Rate
                 </button>
@@ -112,8 +144,17 @@ export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
                     className="pill"
                     type="button"
                     onClick={handleAddToFavorites}
+                    title="Add to Favorites"
                 >
                     ♡
+                </button>
+                <button
+                    className="pill"
+                    type="button"
+                    onClick={handleAddToWatchlist}
+                    title="Add to Watchlist"
+                >
+                    <FontAwesomeIcon icon={faBookmark} />
                 </button>
             </div>
 
@@ -133,6 +174,25 @@ export default function MovieCard({ m = /** @type {TmdbItem} */ ({}) }) {
                     confirmText="OK"
                     onConfirm={() => setShowAlreadyModal(false)}
                     onClose={() => setShowAlreadyModal(false)}
+                />
+            )}
+
+            {/* Watchlist Success Modal */}
+            {showWatchlistSuccessModal && (
+                <ConfirmationModal
+                    message={`"${title}" has been added to your watchlist!`}
+                    onClose={() => setShowWatchlistSuccessModal(false)}
+                />
+            )}
+
+            {/* Already in Watchlist Modal */}
+            {showWatchlistAlreadyModal && (
+                <ConfirmationModal
+                    type="confirm"
+                    message={`"${title}" is already in your watchlist!`}
+                    confirmText="OK"
+                    onConfirm={() => setShowWatchlistAlreadyModal(false)}
+                    onClose={() => setShowWatchlistAlreadyModal(false)}
                 />
             )}
         </div>
