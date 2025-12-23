@@ -71,8 +71,8 @@ export default function MenuSheet() {
                     <Item icon={IcBm} href="/watchlist">Watchlist</Item>
                     <Item icon={IcHeart} href="/favorites">Favorites</Item>
                     <Item icon={IcStar} href="/history-ratings">Ratings</Item>
-                    <Item icon={IcGame}  disabled>Higher / Lower game</Item>
-                    <Item icon={IcLead}  disabled>Leaderboard</Item>
+                    <Item icon={IcGame} href="/higher-lower-game">Higher / Lower Game</Item>
+                    <Item icon={IcLead} href="/leaderboard">Leaderboard</Item>
                     <hr className="menu-sep" />
                     <Item icon={IcLogout} onClick={logout}>Log out</Item>
                 </div>

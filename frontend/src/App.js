@@ -12,6 +12,9 @@ import Favorites from './pages/Favorites';
 import Watchlist from './pages/Watchlist';
 import ReviewForm from './pages/ReviewForm';
 import HistoryRatings from './pages/HistoryRatings';
+import HigherLowerGame from './pages/HigherLowerGame';
+import Leaderboard from './pages/Leaderboard';
+import Onboarding from './pages/Onboarding';
 import "./styles/global.css";
 import "./styles/token.css";
 import "./styles/layout.css";
@@ -26,6 +29,7 @@ export default function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route element={<ProtectedRoute />}>
+                        <Route path="/onboarding" element={<Onboarding />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/movie/:id" element={<MovieDetails />} />
                         <Route path="/tv/:id" element={<MovieDetails />} />
@@ -36,6 +40,8 @@ export default function App() {
                         <Route path="/watchlist" element={<Watchlist />} />
                         <Route path="/review/:mediaType/:tmdbId" element={<ReviewForm />} />
                         <Route path="/history-ratings" element={<HistoryRatings />} />
+                        <Route path="/higher-lower-game" element={<HigherLowerGame />} />
+                        <Route path="/leaderboard" element={<Leaderboard />} />
                     </Route>
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>
