@@ -3,6 +3,7 @@ export default function Filters({ active, onChange }) {
         { key: "popular", label: "Most popular" },
         { key: "latest",  label: "Latest" },
         { key: "top",     label: "Highest rate" },
+        { key: "recommendations", label: "Recommendations" },
     ];
     return (
         <div className="filters">

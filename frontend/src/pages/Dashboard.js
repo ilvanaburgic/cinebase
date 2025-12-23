@@ -42,7 +42,10 @@ export default function Dashboard() {
 
     const title = useMemo(() => {
         if (q) return `Results for "${q}"`;
-        return tab === "popular" ? "Most popular" : tab === "latest" ? "Latest" : "Highest rate";
+        if (tab === "popular") return "Most popular";
+        if (tab === "latest") return "Latest";
+        if (tab === "recommendations") return "Recommendations";
+        return "Highest rate";
     }, [q, tab]);
 
     useEffect(() => {
@@ -65,6 +68,7 @@ export default function Dashboard() {
                 else if (scope === "feed") {
                     if (tab === "popular") apiCall = () => FeedApi.popular(page);
                     else if (tab === "latest") apiCall = () => FeedApi.latest(page);
+                    else if (tab === "recommendations") apiCall = () => FeedApi.recommendations(page);
                     else apiCall = () => FeedApi.topRated(page);
                 }
                 // Movies

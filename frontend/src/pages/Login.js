@@ -38,7 +38,19 @@ export default function Login() {
                 surname: data.surname,
                 createdAt: data.createdAt,
             };
-            login(userObj, data.token);
+
+            // Check if user has completed onboarding
+            try {
+                const { data: hasCompleted } = await api.get("/api/preferences/has-completed-onboarding");
+                login(userObj, data.token);
+                // Note: login() will navigate, but we'll override if needed
+                if (!hasCompleted) {
+                    window.location.href = "/onboarding";
+                }
+            } catch (err) {
+                // If check fails, proceed to dashboard anyway
+                login(userObj, data.token);
+            }
 
         }
     catch

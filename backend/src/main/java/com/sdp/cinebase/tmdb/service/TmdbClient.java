@@ -459,4 +459,98 @@ public class TmdbClient {
             throw new RuntimeException("Failed to fetch person details: " + e.getStatusCode(), e);
         }
     }
+
+    // ================================================
+    // AI RECOMMENDATIONS - SIMILAR & RECOMMENDED
+    // ================================================
+
+    /**
+     * Get similar movies based on TMDB's similarity algorithm.
+     * Uses genres, keywords, and other metadata to find similar content.
+     */
+    public PagedResponse<MovieDto> getSimilarMovies(int movieId, int page) {
+        log.debug("Fetching similar movies for movie id: {}, page: {}", movieId, page);
+        try {
+            return client.get()
+                    .uri(uri -> uri.path("/movie/" + movieId + "/similar")
+                            .queryParam("api_key", apiKey)
+                            .queryParam("language", "en-US")
+                            .queryParam("page", page)
+                            .build())
+                    .retrieve()
+                    .bodyToMono(MOVIE_PAGE_TYPE)
+                    .block();
+        } catch (WebClientResponseException e) {
+            log.error("TMDB API error while fetching similar movies (id {}, page {}): {} - {}",
+                    movieId, page, e.getStatusCode(), e.getMessage());
+            throw new RuntimeException("Failed to fetch similar movies: " + e.getStatusCode(), e);
+        }
+    }
+
+    /**
+     * Get TMDB's AI-powered recommendations for a movie.
+     * Uses machine learning to suggest content based on viewing patterns.
+     */
+    public PagedResponse<MovieDto> getMovieRecommendations(int movieId, int page) {
+        log.debug("Fetching recommendations for movie id: {}, page: {}", movieId, page);
+        try {
+            return client.get()
+                    .uri(uri -> uri.path("/movie/" + movieId + "/recommendations")
+                            .queryParam("api_key", apiKey)
+                            .queryParam("language", "en-US")
+                            .queryParam("page", page)
+                            .build())
+                    .retrieve()
+                    .bodyToMono(MOVIE_PAGE_TYPE)
+                    .block();
+        } catch (WebClientResponseException e) {
+            log.error("TMDB API error while fetching movie recommendations (id {}, page {}): {} - {}",
+                    movieId, page, e.getStatusCode(), e.getMessage());
+            throw new RuntimeException("Failed to fetch movie recommendations: " + e.getStatusCode(), e);
+        }
+    }
+
+    /**
+     * Get similar TV shows based on TMDB's similarity algorithm.
+     */
+    public PagedResponse<MovieDto> getSimilarTvShows(int tvId, int page) {
+        log.debug("Fetching similar TV shows for TV id: {}, page: {}", tvId, page);
+        try {
+            return client.get()
+                    .uri(uri -> uri.path("/tv/" + tvId + "/similar")
+                            .queryParam("api_key", apiKey)
+                            .queryParam("language", "en-US")
+                            .queryParam("page", page)
+                            .build())
+                    .retrieve()
+                    .bodyToMono(MOVIE_PAGE_TYPE)
+                    .block();
+        } catch (WebClientResponseException e) {
+            log.error("TMDB API error while fetching similar TV shows (id {}, page {}): {} - {}",
+                    tvId, page, e.getStatusCode(), e.getMessage());
+            throw new RuntimeException("Failed to fetch similar TV shows: " + e.getStatusCode(), e);
+        }
+    }
+
+    /**
+     * Get TMDB's AI-powered recommendations for a TV show.
+     */
+    public PagedResponse<MovieDto> getTvRecommendations(int tvId, int page) {
+        log.debug("Fetching recommendations for TV id: {}, page: {}", tvId, page);
+        try {
+            return client.get()
+                    .uri(uri -> uri.path("/tv/" + tvId + "/recommendations")
+                            .queryParam("api_key", apiKey)
+                            .queryParam("language", "en-US")
+                            .queryParam("page", page)
+                            .build())
+                    .retrieve()
+                    .bodyToMono(MOVIE_PAGE_TYPE)
+                    .block();
+        } catch (WebClientResponseException e) {
+            log.error("TMDB API error while fetching TV recommendations (id {}, page {}): {} - {}",
+                    tvId, page, e.getStatusCode(), e.getMessage());
+            throw new RuntimeException("Failed to fetch TV recommendations: " + e.getStatusCode(), e);
+        }
+    }
 }

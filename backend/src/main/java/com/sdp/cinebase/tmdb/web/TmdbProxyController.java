@@ -2,7 +2,13 @@ package com.sdp.cinebase.tmdb.web;
 
 import com.sdp.cinebase.tmdb.dto.*;
 import com.sdp.cinebase.tmdb.service.TmdbClient;
+import com.sdp.cinebase.user.model.User;
+import com.sdp.cinebase.user.repo.UserRepository;
+import com.sdp.cinebase.user.service.RecommendationService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * REST controller that proxies TMDB API requests through the backend.
@@ -15,9 +21,17 @@ import org.springframework.web.bind.annotation.*;
 public class TmdbProxyController {
 
     private final TmdbClient tmdb;
+    private final RecommendationService recommendationService;
+    private final UserRepository userRepository;
 
-    public TmdbProxyController(TmdbClient tmdb) {
+    public TmdbProxyController(
+            TmdbClient tmdb,
+            RecommendationService recommendationService,
+            UserRepository userRepository
+    ) {
         this.tmdb = tmdb;
+        this.recommendationService = recommendationService;
+        this.userRepository = userRepository;
     }
 
     // ================================================
@@ -115,6 +129,27 @@ public class TmdbProxyController {
     public PagedResponse<MovieDto> feedTopRated(@RequestParam(defaultValue = "1") int page) {
         // Combined top-rated movies and TV shows, sorted by rating
         return tmdb.combinedTopRated(page);
+    }
+
+    @GetMapping("/feed/recommendations")
+    public PagedResponse<MovieDto> feedRecommendations(
+            @RequestParam(defaultValue = "1") int page,
+            Authentication authentication
+    ) {
+        // AI-powered recommendations based on user's favorite picks
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<MovieDto> recommendations = recommendationService.getRecommendations(user, page);
+
+        // Return as paged response (simplified - single page with all recommendations)
+        return new PagedResponse<>(
+                page,
+                recommendations,
+                1, // total_pages
+                recommendations.size() // total_results
+        );
     }
 
     // ================================================

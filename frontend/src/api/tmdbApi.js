@@ -156,5 +156,6 @@ export const MultiApi = {
 export const FeedApi = {
     popular:  (page = 1) => backendTmdb("/feed/popular", { page }),
     latest:   (page = 1) => backendTmdb("/feed/latest", { page }),
-    topRated: (page = 1) => backendTmdb("/feed/top-rated", { page })
+    topRated: (page = 1) => backendTmdb("/feed/top-rated", { page }),
+    recommendations: (page = 1) => backendTmdb("/feed/recommendations", { page })
 };
