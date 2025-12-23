@@ -1,0 +1,278 @@
+.page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+}
+
+.heroSection {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.content {
+    flex: 1;
+    max-width: 700px;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 24px;
+    padding: 48px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.title {
+    font-size: 56px;
+    font-weight: 900;
+    margin: 0 0 40px;
+    color: #0b0f14;
+    letter-spacing: -1px;
+}
+
+/* Loading & Error States */
+.loading,
+.error,
+.empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6b7280;
+}
+
+.loading {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.error {
+    color: #ef4444;
+}
+
+.error p {
+    margin: 0 0 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.error button,
+.playBtn {
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+.error button:hover,
+.playBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+}
+
+.empty {
+    color: #6b7280;
+}
+
+.empty p {
+    margin: 0 0 12px;
+    font-size: 18px;
+}
+
+.empty p:first-child {
+    font-size: 24px;
+    font-weight: 700;
+    color: #374151;
+}
+
+.playBtn {
+    margin-top: 20px;
+}
+
+/* Leaderboard List */
+.leaderboardList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: none;
+}
+
+.leaderboardItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border-radius: 16px;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.leaderboardItem:hover {
+    background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+    border-color: #667eea;
+    transform: translateX(4px);
+}
+
+.leaderboardItem.topThree {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-color: #fbbf24;
+}
+
+.leaderboardItem.topThree:hover {
+    background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+    border-color: #f59e0b;
+}
+
+.leftColumn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+.rank {
+    font-size: 24px;
+    font-weight: 900;
+    color: #667eea;
+    min-width: 40px;
+}
+
+.topThree .rank {
+    color: #f59e0b;
+}
+
+.username {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.rightColumn {
+    display: flex;
+    align-items: center;
+}
+
+.score {
+    font-size: 28px;
+    font-weight: 900;
+    color: #667eea;
+    min-width: 60px;
+    text-align: right;
+}
+
+.topThree .score {
+    color: #f59e0b;
+}
+
+/* Decorative Triangle Shape */
+.decorShape {
+    position: absolute;
+    right: -100px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 300px 0 300px 250px;
+    border-color: transparent transparent transparent rgba(255, 255, 255, 0.1);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .decorShape {
+        display: none;
+    }
+
+    .content {
+        max-width: 100%;
+        padding: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 42px;
+        margin-bottom: 32px;
+    }
+
+    .content {
+        padding: 24px;
+        border-radius: 16px;
+    }
+
+    .leaderboardItem {
+        padding: 16px 20px;
+        margin-bottom: 10px;
+    }
+
+    .rank {
+        font-size: 20px;
+        min-width: 32px;
+    }
+
+    .username {
+        font-size: 18px;
+    }
+
+    .score {
+        font-size: 24px;
+        min-width: 50px;
+    }
+
+    .leftColumn {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .heroSection {
+        padding: 20px 12px;
+    }
+
+    .title {
+        font-size: 32px;
+        margin-bottom: 24px;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .leaderboardItem {
+        padding: 14px 16px;
+    }
+
+    .rank {
+        font-size: 18px;
+        min-width: 28px;
+    }
+
+    .username {
+        font-size: 16px;
+    }
+
+    .score {
+        font-size: 20px;
+        min-width: 45px;
+    }
+}
