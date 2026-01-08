@@ -9,6 +9,11 @@ import com.sdp.cinebase.user.model.FavoritePick;
 import com.sdp.cinebase.user.model.User;
 import com.sdp.cinebase.user.repo.FavoritePickRepository;
 import com.sdp.cinebase.user.repo.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +24,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/preferences")
+@Tag(name = "User Preferences", description = "User onboarding and preference management for personalized recommendations")
+@SecurityRequirement(name = "bearer-jwt")
 public class PreferencesController {
 
     private final TmdbClient tmdbClient;
@@ -39,6 +46,10 @@ public class PreferencesController {
      * Get 20 popular movies and TV shows for onboarding screen.
      * Returns 10 popular movies + 10 popular TV shows.
      */
+    @Operation(summary = "Get onboarding options", description = "Get 20 popular movies and TV shows for user onboarding selection (10 movies + 10 TV shows)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Options retrieved successfully")
+    })
     @GetMapping("/onboarding-options")
     public ResponseEntity<List<OnboardingOptionDto>> getOnboardingOptions() {
         List<OnboardingOptionDto> options = new ArrayList<>();
@@ -82,6 +93,11 @@ public class PreferencesController {
     /**
      * Check if the current user has completed onboarding (has saved picks).
      */
+    @Operation(summary = "Check onboarding status", description = "Check if the user has completed the onboarding process by saving their favorite picks")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Status retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "Not authenticated")
+    })
     @GetMapping("/has-completed-onboarding")
     public ResponseEntity<Boolean> hasCompletedOnboarding(Authentication authentication) {
         String username = authentication.getName();
@@ -95,6 +111,11 @@ public class PreferencesController {
     /**
      * Save user's 4 favorite picks during onboarding.
      */
+    @Operation(summary = "Save user picks", description = "Save user's 4 favorite movie/TV show picks during onboarding for personalized AI recommendations")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Picks saved successfully"),
+            @ApiResponse(responseCode = "401", description = "Not authenticated")
+    })
     @PostMapping("/save-picks")
     public ResponseEntity<Void> savePicks(
             @RequestBody SavePicksRequest request,

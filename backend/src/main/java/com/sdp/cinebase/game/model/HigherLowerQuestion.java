@@ -1,21 +1,25 @@
 package com.sdp.cinebase.game.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.annotations.Check;
 import java.time.Instant;
 
 @Entity
 @Table(name = "higher_lower_questions")
+@Check(constraints = "media_type IN ('movie', 'tv')")
 public class HigherLowerQuestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
+    @Pattern(regexp = "movie|tv", message = "Media type must be 'movie' or 'tv'")
     private String mediaType; // "movie" or "tv"
 
     @Column(nullable = false)
-    private Integer tmdbId;
+    private Long tmdbId;
 
     @Column(nullable = false)
     private String title;
@@ -33,7 +37,7 @@ public class HigherLowerQuestion {
 
     public HigherLowerQuestion() {}
 
-    public HigherLowerQuestion(String mediaType, Integer tmdbId, String title, String posterPath, String metric, Double value) {
+    public HigherLowerQuestion(String mediaType, Long tmdbId, String title, String posterPath, String metric, Double value) {
         this.mediaType = mediaType;
         this.tmdbId = tmdbId;
         this.title = title;
@@ -58,7 +62,7 @@ public class HigherLowerQuestion {
         return mediaType;
     }
 
-    public Integer getTmdbId() {
+    public Long getTmdbId() {
         return tmdbId;
     }
 

@@ -1,6 +1,9 @@
 package com.sdp.cinebase.watchlist.model;
 
+import com.sdp.cinebase.user.model.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.annotations.Check;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -8,19 +11,22 @@ import java.util.Objects;
 @Table(name = "watchlist", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"user_id", "tmdb_id", "media_type"})
 })
+@Check(constraints = "media_type IN ('movie', 'tv')")
 public class Watchlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "tmdb_id", nullable = false)
     private Long tmdbId;
 
     @Column(name = "media_type", nullable = false, length = 20)
+    @Pattern(regexp = "movie|tv", message = "Media type must be 'movie' or 'tv'")
     private String mediaType; // "movie" or "tv"
 
     @Column(name = "title", nullable = false)
@@ -53,12 +59,17 @@ public class Watchlist {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    // Helper method for backward compatibility and convenience
+    public Long getUserId() {
+        return user != null ? user.getId() : null;
     }
 
     public Long getTmdbId() {
@@ -110,7 +121,7 @@ public class Watchlist {
         }
 
         // If IDs are null, compare by unique constraint fields
-        return Objects.equals(userId, watchlist.userId) &&
+        return Objects.equals(getUserId(), watchlist.getUserId()) &&
                Objects.equals(tmdbId, watchlist.tmdbId) &&
                Objects.equals(mediaType, watchlist.mediaType);
     }
@@ -121,14 +132,14 @@ public class Watchlist {
             return Objects.hash(id);
         }
         // Use unique constraint fields for hashCode
-        return Objects.hash(userId, tmdbId, mediaType);
+        return Objects.hash(getUserId(), tmdbId, mediaType);
     }
 
     @Override
     public String toString() {
         return "Watchlist{" +
                 "id=" + id +
-                ", userId=" + userId +
+                ", userId=" + getUserId() +
                 ", tmdbId=" + tmdbId +
                 ", mediaType='" + mediaType + '\'' +
                 ", title='" + title + '\'' +

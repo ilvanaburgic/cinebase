@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface WatchlistRepository extends JpaRepository<Watchlist, Long> {
 
-    List<Watchlist> findByUserIdOrderByAddedAtDesc(Long userId);
+    List<Watchlist> findByUser_IdOrderByAddedAtDesc(Long userId);
 
-    boolean existsByUserIdAndTmdbIdAndMediaType(Long userId, Long tmdbId, String mediaType);
+    boolean existsByUser_IdAndTmdbIdAndMediaType(Long userId, Long tmdbId, String mediaType);
 }

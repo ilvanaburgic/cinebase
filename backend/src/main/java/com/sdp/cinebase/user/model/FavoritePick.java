@@ -1,10 +1,13 @@
 package com.sdp.cinebase.user.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.annotations.Check;
 import java.time.Instant;
 
 @Entity
 @Table(name = "favorite_picks")
+@Check(constraints = "media_type IN ('movie', 'tv')")
 public class FavoritePick {
 
     @Id
@@ -16,9 +19,10 @@ public class FavoritePick {
     private User user;
 
     @Column(nullable = false)
-    private Integer tmdbId;
+    private Long tmdbId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
+    @Pattern(regexp = "movie|tv", message = "Media type must be 'movie' or 'tv'")
     private String mediaType; // "movie" or "tv"
 
     @Column(nullable = false)
@@ -41,7 +45,7 @@ public class FavoritePick {
     public FavoritePick() {
     }
 
-    public FavoritePick(User user, Integer tmdbId, String mediaType, String title, String genres) {
+    public FavoritePick(User user, Long tmdbId, String mediaType, String title, String genres) {
         this.user = user;
         this.tmdbId = tmdbId;
         this.mediaType = mediaType;
@@ -66,11 +70,11 @@ public class FavoritePick {
         this.user = user;
     }
 
-    public Integer getTmdbId() {
+    public Long getTmdbId() {
         return tmdbId;
     }
 
-    public void setTmdbId(Integer tmdbId) {
+    public void setTmdbId(Long tmdbId) {
         this.tmdbId = tmdbId;
     }
 

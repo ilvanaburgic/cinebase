@@ -4,6 +4,8 @@ import com.sdp.cinebase.favorite.dto.AddFavoriteRequest;
 import com.sdp.cinebase.favorite.dto.FavoriteResponse;
 import com.sdp.cinebase.favorite.model.Favorite;
 import com.sdp.cinebase.favorite.repo.FavoriteRepository;
+import com.sdp.cinebase.user.model.User;
+import com.sdp.cinebase.user.repo.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,19 +16,25 @@ import java.util.List;
 public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
+    private final UserRepository userRepository;
 
-    public FavoriteService(FavoriteRepository favoriteRepository) {
+    public FavoriteService(FavoriteRepository favoriteRepository, UserRepository userRepository) {
         this.favoriteRepository = favoriteRepository;
+        this.userRepository = userRepository;
     }
 
     public FavoriteResponse addFavorite(Long userId, AddFavoriteRequest request) {
         // Check if already exists
-        if (favoriteRepository.existsByUserIdAndTmdbIdAndMediaType(userId, request.tmdbId(), request.mediaType())) {
+        if (favoriteRepository.existsByUser_IdAndTmdbIdAndMediaType(userId, request.tmdbId(), request.mediaType())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Already in favorites");
         }
 
+        // Fetch user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
         Favorite favorite = new Favorite();
-        favorite.setUserId(userId);
+        favorite.setUser(user);
         favorite.setTmdbId(request.tmdbId());
         favorite.setMediaType(request.mediaType());
         favorite.setTitle(request.title());
@@ -37,7 +45,7 @@ public class FavoriteService {
     }
 
     public List<FavoriteResponse> getUserFavorites(Long userId) {
-        return favoriteRepository.findByUserIdOrderByAddedAtDesc(userId)
+        return favoriteRepository.findByUser_IdOrderByAddedAtDesc(userId)
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -56,7 +64,7 @@ public class FavoriteService {
     }
 
     public boolean isFavorite(Long userId, Long tmdbId, String mediaType) {
-        return favoriteRepository.existsByUserIdAndTmdbIdAndMediaType(userId, tmdbId, mediaType);
+        return favoriteRepository.existsByUser_IdAndTmdbIdAndMediaType(userId, tmdbId, mediaType);
     }
 
     private FavoriteResponse toResponse(Favorite f) {

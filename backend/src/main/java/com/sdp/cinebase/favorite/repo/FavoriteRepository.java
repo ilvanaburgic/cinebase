@@ -9,8 +9,7 @@ import java.util.List;
 @Repository
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
-    List<Favorite> findByUserIdOrderByAddedAtDesc(Long userId);
+    List<Favorite> findByUser_IdOrderByAddedAtDesc(Long userId);
 
-
-    boolean existsByUserIdAndTmdbIdAndMediaType(Long userId, Long tmdbId, String mediaType);
+    boolean existsByUser_IdAndTmdbIdAndMediaType(Long userId, Long tmdbId, String mediaType);
 }

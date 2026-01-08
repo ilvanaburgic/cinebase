@@ -4,7 +4,7 @@ import java.util.List;
 
 public record SavePicksRequest(List<PickItem> picks) {
     public record PickItem(
-            Integer tmdbId,
+            Long tmdbId,
             String mediaType,
             String title,
             String genres

@@ -3,7 +3,7 @@ package com.sdp.cinebase.game.dto;
 public record HigherLowerQuestionDto(
     Long id,
     String mediaType,
-    Integer tmdbId,
+    Long tmdbId,
     String title,
     String posterPath,
     String metric,

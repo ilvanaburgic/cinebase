@@ -23,7 +23,7 @@ public class HigherLowerService {
         java.util.Collections.shuffle(allMetrics);
 
         List<HigherLowerQuestion> result = new java.util.ArrayList<>();
-        java.util.Set<Integer> usedIds = new java.util.HashSet<>();
+        java.util.Set<Long> usedIds = new java.util.HashSet<>();
 
         // Generate pairs: for each question, we need 2 items with the SAME metric
         // For 10 questions, we need 20 items (2 per question) organized in pairs

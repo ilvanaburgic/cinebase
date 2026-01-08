@@ -12,9 +12,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findByTmdbIdAndMediaTypeOrderByCreatedAtDesc(Long tmdbId, String mediaType);
 
-    Optional<Review> findByUserIdAndTmdbIdAndMediaType(Long userId, Long tmdbId, String mediaType);
+    Optional<Review> findByUser_IdAndTmdbIdAndMediaType(Long userId, Long tmdbId, String mediaType);
 
-    boolean existsByUserIdAndTmdbIdAndMediaType(Long userId, Long tmdbId, String mediaType);
+    boolean existsByUser_IdAndTmdbIdAndMediaType(Long userId, Long tmdbId, String mediaType);
 
-    List<Review> findByUserIdOrderByCreatedAtDesc(Long userId);
+    List<Review> findByUser_IdOrderByCreatedAtDesc(Long userId);
 }

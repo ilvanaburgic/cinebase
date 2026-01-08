@@ -1,5 +1,6 @@
 package com.sdp.cinebase.review.service;
 
+import com.sdp.cinebase.email.EmailService;
 import com.sdp.cinebase.user.model.User;
 import com.sdp.cinebase.user.repo.UserRepository;
 import com.sdp.cinebase.review.dto.AddReviewRequest;
@@ -18,23 +19,29 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
-    public ReviewService(ReviewRepository reviewRepository, UserRepository userRepository) {
+    public ReviewService(ReviewRepository reviewRepository, UserRepository userRepository, EmailService emailService) {
         this.reviewRepository = reviewRepository;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     public ReviewResponse createReview(Long userId, AddReviewRequest request) {
         // Check if user already has a review for this item
-        if (reviewRepository.existsByUserIdAndTmdbIdAndMediaType(userId, request.tmdbId(), request.mediaType())) {
+        if (reviewRepository.existsByUser_IdAndTmdbIdAndMediaType(userId, request.tmdbId(), request.mediaType())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Review already exists. Use update endpoint.");
         }
 
         // Validate request
         validateReviewRequest(request);
 
+        // Get user for email notification
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
         Review review = new Review();
-        review.setUserId(userId);
+        review.setUser(user);
         review.setTmdbId(request.tmdbId());
         review.setMediaType(request.mediaType());
         review.setTitle(request.title());
@@ -42,11 +49,27 @@ public class ReviewService {
         review.setReviewText(request.reviewText());
 
         Review saved = reviewRepository.save(review);
+
+        // Send email confirmation asynchronously
+        try {
+            emailService.sendReviewConfirmation(
+                    user.getEmail(),
+                    user.getUsername(),
+                    request.title(),
+                    request.mediaType(),
+                    request.rating() != null ? request.rating() / 2.0 : 5.0, // Convert 1-10 to 1-5 for stars
+                    request.reviewText() != null ? request.reviewText() : "No review text provided"
+            );
+        } catch (Exception e) {
+            // Log but don't fail the request if email fails
+            // Email service logs errors internally
+        }
+
         return toResponse(saved);
     }
 
     public ReviewResponse updateReview(Long userId, Long tmdbId, String mediaType, AddReviewRequest request) {
-        Review review = reviewRepository.findByUserIdAndTmdbIdAndMediaType(userId, tmdbId, mediaType)
+        Review review = reviewRepository.findByUser_IdAndTmdbIdAndMediaType(userId, tmdbId, mediaType)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found"));
 
         // Validate request
@@ -61,7 +84,7 @@ public class ReviewService {
     }
 
     public void deleteReview(Long userId, Long tmdbId, String mediaType) {
-        Review review = reviewRepository.findByUserIdAndTmdbIdAndMediaType(userId, tmdbId, mediaType)
+        Review review = reviewRepository.findByUser_IdAndTmdbIdAndMediaType(userId, tmdbId, mediaType)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found"));
 
         reviewRepository.delete(review);
@@ -75,12 +98,12 @@ public class ReviewService {
     }
 
     public Optional<ReviewResponse> getUserReview(Long userId, Long tmdbId, String mediaType) {
-        return reviewRepository.findByUserIdAndTmdbIdAndMediaType(userId, tmdbId, mediaType)
+        return reviewRepository.findByUser_IdAndTmdbIdAndMediaType(userId, tmdbId, mediaType)
                 .map(this::toResponse);
     }
 
     public List<ReviewResponse> getAllUserReviews(Long userId) {
-        return reviewRepository.findByUserIdOrderByCreatedAtDesc(userId)
+        return reviewRepository.findByUser_IdOrderByCreatedAtDesc(userId)
                 .stream()
                 .map(this::toResponse)
                 .toList();

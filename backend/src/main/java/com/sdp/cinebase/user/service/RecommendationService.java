@@ -67,7 +67,7 @@ public class RecommendationService {
         }
 
         // Extract picked IDs to exclude from recommendations
-        Set<Integer> pickedTmdbIds = picks.stream()
+        Set<Long> pickedTmdbIds = picks.stream()
                 .map(FavoritePick::getTmdbId)
                 .collect(Collectors.toSet());
 
@@ -131,9 +131,9 @@ public class RecommendationService {
         try {
             PagedResponse<MovieDto> response;
             if ("movie".equals(pick.getMediaType())) {
-                response = tmdbClient.getSimilarMovies(pick.getTmdbId(), 1);
+                response = tmdbClient.getSimilarMovies(pick.getTmdbId().intValue(), 1);
             } else {
-                response = tmdbClient.getSimilarTvShows(pick.getTmdbId(), 1);
+                response = tmdbClient.getSimilarTvShows(pick.getTmdbId().intValue(), 1);
             }
             return response != null ? response.results() : Collections.emptyList();
         } catch (Exception e) {
@@ -149,9 +149,9 @@ public class RecommendationService {
         try {
             PagedResponse<MovieDto> response;
             if ("movie".equals(pick.getMediaType())) {
-                response = tmdbClient.getMovieRecommendations(pick.getTmdbId(), 1);
+                response = tmdbClient.getMovieRecommendations(pick.getTmdbId().intValue(), 1);
             } else {
-                response = tmdbClient.getTvRecommendations(pick.getTmdbId(), 1);
+                response = tmdbClient.getTvRecommendations(pick.getTmdbId().intValue(), 1);
             }
             return response != null ? response.results() : Collections.emptyList();
         } catch (Exception e) {

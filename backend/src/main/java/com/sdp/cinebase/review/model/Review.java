@@ -1,6 +1,11 @@
 package com.sdp.cinebase.review.model;
 
+import com.sdp.cinebase.user.model.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.annotations.Check;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -8,25 +13,31 @@ import java.util.Objects;
 @Table(name = "reviews", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"user_id", "tmdb_id", "media_type"})
 })
+@Check(constraints = "media_type IN ('movie', 'tv')")
+@Check(constraints = "rating IS NULL OR (rating >= 1 AND rating <= 10)")
 public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "tmdb_id", nullable = false)
     private Long tmdbId;
 
     @Column(name = "media_type", nullable = false, length = 20)
+    @Pattern(regexp = "movie|tv", message = "Media type must be 'movie' or 'tv'")
     private String mediaType; // "movie" or "tv"
 
     @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "rating")
+    @Min(value = 1, message = "Rating must be at least 1")
+    @Max(value = 10, message = "Rating must be at most 10")
     private Integer rating; // 1-10, nullable (može biti samo review bez ratinga)
 
     @Column(name = "review_text", columnDefinition = "TEXT")
@@ -67,12 +78,17 @@ public class Review {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    // Helper method for backward compatibility and convenience
+    public Long getUserId() {
+        return user != null ? user.getId() : null;
     }
 
     public Long getTmdbId() {
@@ -135,7 +151,7 @@ public class Review {
         if (id != null && review.id != null) {
             return Objects.equals(id, review.id);
         }
-        return Objects.equals(userId, review.userId) &&
+        return Objects.equals(getUserId(), review.getUserId()) &&
                Objects.equals(tmdbId, review.tmdbId) &&
                Objects.equals(mediaType, review.mediaType);
     }
@@ -145,14 +161,14 @@ public class Review {
         if (id != null) {
             return Objects.hash(id);
         }
-        return Objects.hash(userId, tmdbId, mediaType);
+        return Objects.hash(getUserId(), tmdbId, mediaType);
     }
 
     @Override
     public String toString() {
         return "Review{" +
                 "id=" + id +
-                ", userId=" + userId +
+                ", userId=" + getUserId() +
                 ", tmdbId=" + tmdbId +
                 ", mediaType='" + mediaType + '\'' +
                 ", title='" + title + '\'' +
