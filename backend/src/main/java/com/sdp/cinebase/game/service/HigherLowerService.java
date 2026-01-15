@@ -31,7 +31,6 @@ public class HigherLowerService {
         // Pair 2: [item2, item3] both with same metric (can be different from pair 1)
         // ...
         int itemsNeeded = count * 2;
-        int pairsGenerated = 0;
         int metricsIndex = 0;
 
         while (result.size() < itemsNeeded && metricsIndex < allMetrics.size() * count) {
@@ -49,16 +48,15 @@ public class HigherLowerService {
                     usedIds.add(q.getTmdbId());
                     added++;
                     if (added >= 2) {
-                        pairsGenerated++;
                         break;
                     }
                 }
             }
 
             // If we couldn't find 2 items for this metric, remove the partial add
-            if (added == 1) {
-                result.remove(result.size() - 1);
-                usedIds.remove(result.get(result.size() - 1).getTmdbId());
+            if (added == 1 && !result.isEmpty()) {
+                HigherLowerQuestion lastAdded = result.remove(result.size() - 1);
+                usedIds.remove(lastAdded.getTmdbId());
             }
         }
 

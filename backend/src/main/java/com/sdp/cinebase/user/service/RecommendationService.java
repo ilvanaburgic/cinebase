@@ -15,14 +15,12 @@ import java.util.stream.Collectors;
 
 /**
  * AI-Powered Recommendation Service using TMDB's machine learning algorithms.
- *
  * This service leverages TMDB's /similar and /recommendations endpoints which use:
  * - Genre similarity
  * - Keyword matching
  * - Cast & crew overlap
  * - User viewing patterns (collaborative filtering)
  * - Content-based filtering algorithms
- *
  * We aggregate recommendations from multiple sources and use frequency-based scoring
  * to ensure the most relevant content bubbles to the top.
  */
@@ -41,7 +39,6 @@ public class RecommendationService {
 
     /**
      * Generate AI-powered personalized recommendations for a user.
-     *
      * Algorithm:
      * 1. For each of user's 4 favorite picks, fetch:
      *    - TMDB's "similar" content (based on metadata: genres, keywords, etc.)
@@ -67,8 +64,8 @@ public class RecommendationService {
         }
 
         // Extract picked IDs to exclude from recommendations
-        Set<Long> pickedTmdbIds = picks.stream()
-                .map(FavoritePick::getTmdbId)
+        Set<Integer> pickedTmdbIds = picks.stream()
+                .map(pick -> pick.getTmdbId().intValue())
                 .collect(Collectors.toSet());
 
         // Extract genre preferences
@@ -178,7 +175,6 @@ public class RecommendationService {
 
     /**
      * Calculate advanced recommendation score based on multiple factors.
-     *
      * Scoring factors:
      * 1. Frequency (10 points per occurrence) - appears in multiple recommendation lists
      * 2. Genre overlap (5 points per matching genre × weight)
@@ -225,7 +221,7 @@ public class RecommendationService {
                 continue;
             }
 
-            // Parse genres (stored as JSON array string like "[\"Action\",\"Drama\"]")
+            // Parse genres (stored as JSON array string like [\"Action\",\"Drama\"]")
             String[] genres = parseGenreArray(genresJson);
             for (String genre : genres) {
                 weights.put(genre, weights.getOrDefault(genre, 0) + 1);
@@ -234,7 +230,6 @@ public class RecommendationService {
 
         return weights;
     }
-
 
     /**
      * Parse genre array from JSON string format.

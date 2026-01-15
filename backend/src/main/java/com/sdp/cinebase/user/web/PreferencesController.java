@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/preferences")
@@ -67,7 +66,7 @@ public class PreferencesController {
                         movie.vote_average(),
                         extractGenreNames(movie.genre_ids())
                 ))
-                .collect(Collectors.toList());
+                .toList();
 
         // Fetch 10 popular TV shows
         PagedResponse<MovieDto> tvShows = tmdbClient.popularTvShows(1);
@@ -82,7 +81,7 @@ public class PreferencesController {
                         tv.vote_average(),
                         extractGenreNames(tv.genre_ids())
                 ))
-                .collect(Collectors.toList());
+                .toList();
 
         options.addAll(movieOptions);
         options.addAll(tvOptions);
@@ -140,7 +139,7 @@ public class PreferencesController {
                         pickItem.title(),
                         pickItem.genres()
                 ))
-                .collect(Collectors.toList());
+                .toList();
 
         favoritePickRepository.saveAll(picks);
 

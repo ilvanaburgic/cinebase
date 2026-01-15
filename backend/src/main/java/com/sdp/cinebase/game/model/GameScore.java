@@ -64,11 +64,4 @@ public class GameScore {
         this.score = score;
     }
 
-    public Instant getPlayedAt() {
-        return playedAt;
-    }
-
-    public void setPlayedAt(Instant playedAt) {
-        this.playedAt = playedAt;
-    }
 }
