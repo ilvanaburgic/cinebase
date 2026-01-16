@@ -28,6 +28,8 @@
 .tabs {
     display: flex;
     gap: 12px;
+    flex: 1;
+    justify-content: center;
 }
 
 .tabs button {
@@ -38,6 +40,7 @@
     padding: 8px 12px;
     border-radius: 8px;
     transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
 .tabs button:hover {
@@ -53,6 +56,26 @@
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+/* Mobile navbar adjustments */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 12px 12px;
+    }
+
+    .brand {
+        font-size: 16px;
+    }
+
+    .tabs {
+        gap: 6px;
+    }
+
+    .tabs button {
+        padding: 6px 8px;
+        font-size: 13px;
+    }
 }
 
 /* Hero Section */
