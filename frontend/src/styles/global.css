@@ -123,9 +123,16 @@ body { background: var(--bg); color: var(--text); font-family: system-ui,-apple-
 
 /* LAYOUT + FILTERS */
 .container{ padding:18px 20px; }
-.filters{ display:flex; gap:10px; margin:12px 0 8px; }
+.filters{ display:flex; flex-wrap: wrap; gap:10px; margin:12px 0 8px; }
 .filters button{  color:#FFFFFF; border:1px solid #000000; padding:10px 35px; border-radius:2px; cursor:pointer; }
 .filters .active{ background:var(--pill); color:var(--pillText); }
+
+/* Mobile: Smaller filter buttons */
+@media (max-width: 768px) {
+    .container { padding: 18px 16px; }
+    .filters { gap: 8px; }
+    .filters button { padding: 8px 16px; font-size: 14px; }
+}
 
 .section-head{ display:flex; align-items:center; justify-content:space-between; margin:12px 0 8px; }
 .section-title{ font-size:22px; color:#000000 }
