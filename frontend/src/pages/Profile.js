@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
+import Navbar from "../components/Navbar";
 import ConfirmationModal from "../components/ConfirmationModal";
 import styles from "./Profile.module.css";
 
@@ -95,9 +96,7 @@ export default function Profile() {
 
     return (
         <div className={styles.page}>
-            <header className={styles.topbar}>
-                <div className={styles.brand}>🎬 CINEBASE</div>
-            </header>
+            <Navbar />
 
             <main className={styles.center}>
                 <div className={styles.card}>
