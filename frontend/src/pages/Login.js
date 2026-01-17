@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -23,6 +23,27 @@ export default function Login() {
     } = useForm({resolver: zodResolver(schema), mode: "onBlur"});
 
     const [serverMsg, setServerMsg] = useState(null);
+    const [wakingUp, setWakingUp] = useState(false);
+
+    // Wake up the backend server on component mount
+    useEffect(() => {
+        const startTime = Date.now();
+        setWakingUp(true);
+
+        api.get("/api/health")
+            .catch(() => {
+                // Silently fail - server will wake up anyway
+            })
+            .finally(() => {
+                const elapsed = Date.now() - startTime;
+                // Keep "waking up" message for at least 2 seconds if server was slow
+                if (elapsed > 2000) {
+                    setTimeout(() => setWakingUp(false), 500);
+                } else {
+                    setWakingUp(false);
+                }
+            });
+    }, []);
 
     const onSubmit = async (values) => {
         setServerMsg(null);
@@ -89,6 +110,12 @@ export default function Login() {
             <main className={styles.center}>
                 <div className={styles.card}>
                     <h1 className={styles.title}>Login</h1>
+
+                    {wakingUp && (
+                        <div className={`${styles.alert} ${styles.info}`}>
+                            ⏳ Waking up the server... This may take up to 60 seconds on first visit.
+                        </div>
+                    )}
 
                     {serverMsg && <div className={`${styles.alert} ${styles.warn}`}>{serverMsg}</div>}
 
