@@ -130,7 +130,7 @@ export default function Favorites() {
                                     </div>
 
                                     <div className={styles.rating}>
-                                        ★ {fav.rating}
+                                        {fav.rating}
                                     </div>
                                 </div>
 

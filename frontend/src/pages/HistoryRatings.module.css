@@ -6,7 +6,7 @@
 .container {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 24px 20px;
 }
 
 .loading {
@@ -32,7 +32,7 @@
 .subtitle {
     font-size: 16px;
     color: #6b7280;
-    margin: 0 0 32px;
+    margin: 0 0 20px;
 }
 
 /* Empty State */
@@ -84,13 +84,13 @@
 .reviewsList {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 14px;
 }
 
 .reviewCard {
     background: white;
     border-radius: 12px;
-    padding: 24px;
+    padding: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     border: 1px solid #e0e0e0;
     transition: all 0.2s ease;
@@ -105,7 +105,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     gap: 16px;
 }
 
@@ -113,7 +113,7 @@
     font-size: 20px;
     font-weight: 700;
     color: #0b0f14;
-    margin: 0 0 8px;
+    margin: 0 0 6px;
     cursor: pointer;
     transition: color 0.2s ease;
 }
@@ -124,23 +124,24 @@
 
 .reviewMeta {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
     flex-wrap: wrap;
-    font-size: 14px;
-    color: #6b7280;
+    font-size: 13px;
+    color: #9ca3af;
 }
 
 .mediaType {
-    background: rgba(11, 15, 20, 0.08);
-    padding: 4px 12px;
+    background: rgba(11, 15, 20, 0.05);
+    padding: 3px 10px;
     border-radius: 999px;
     font-weight: 500;
-    color: #0b0f14;
+    font-size: 12px;
+    color: #6b7280;
 }
 
 .reviewDate {
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .edited {
@@ -151,59 +152,55 @@
 .ratingBadge {
     background: #f2c230;
     color: #0b0f14;
-    padding: 8px 16px;
+    padding: 6px 12px;
     border-radius: 999px;
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 600;
     white-space: nowrap;
 }
 
 .reviewText {
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.6;
-    color: #444;
-    margin: 0 0 16px;
+    color: #6b7280;
+    margin: 0 0 12px;
     white-space: pre-wrap;
 }
 
 .cardActions {
     display: flex;
-    gap: 12px;
-    padding-top: 16px;
-    border-top: 1px solid #e0e0e0;
+    gap: 16px;
+    padding-top: 10px;
 }
 
 .editBtn,
 .deleteBtn {
-    padding: 8px 20px;
+    padding: 0;
+    background: transparent;
     border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
+    text-decoration: none;
 }
 
 .editBtn {
-    background: rgba(242, 194, 48, 0.1);
-    color: #0b0f14;
-    border: 2px solid rgba(242, 194, 48, 0.3);
+    color: #6b7280;
 }
 
 .editBtn:hover {
-    background: rgba(242, 194, 48, 0.2);
-    border-color: rgba(242, 194, 48, 0.5);
+    color: #0b0f14;
+    text-decoration: underline;
 }
 
 .deleteBtn {
-    background: rgba(239, 68, 68, 0.1);
-    color: #dc2626;
-    border: 2px solid rgba(239, 68, 68, 0.3);
+    color: #9ca3af;
 }
 
 .deleteBtn:hover {
-    background: rgba(239, 68, 68, 0.2);
-    border-color: rgba(239, 68, 68, 0.5);
+    color: #dc2626;
+    text-decoration: underline;
 }
 
 /* Responsive */
@@ -226,11 +223,6 @@
     }
 
     .cardActions {
-        flex-direction: column;
-    }
-
-    .editBtn,
-    .deleteBtn {
-        width: 100%;
+        gap: 20px;
     }
 }

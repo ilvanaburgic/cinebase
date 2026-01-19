@@ -134,7 +134,7 @@ export default function Watchlist() {
                                     </div>
 
                                     <div className={styles.rating}>
-                                        ★ {item.rating}
+                                        {item.rating}
                                     </div>
                                 </div>
 
