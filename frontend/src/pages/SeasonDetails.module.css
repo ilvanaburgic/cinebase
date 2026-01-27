@@ -109,3 +109,42 @@
     padding: 18px;
     margin-top: 40px;
 }
+
+/* Mobile: Vertical layout (image on top, text below) */
+@media (max-width: 768px) {
+    .header {
+        padding: 20px 16px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .episodes {
+        margin: 20px auto;
+        padding: 0 16px;
+        gap: 16px;
+    }
+
+    .episodeCard {
+        flex-direction: column;
+    }
+
+    .episodeImage {
+        width: 100%;
+        height: 200px;
+    }
+
+    .episodeInfo {
+        padding: 16px;
+    }
+
+    .episodeInfo h3 {
+        font-size: 18px;
+    }
+
+    .episodeMeta {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}

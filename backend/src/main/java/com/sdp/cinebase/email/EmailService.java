@@ -21,13 +21,16 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final String fromEmail;
     private final String fromName;
+    private final String frontendUrl;
 
     public EmailService(JavaMailSender mailSender,
                         @Value("${app.email.from}") String fromEmail,
-                        @Value("${app.email.name}") String fromName) {
+                        @Value("${app.email.name}") String fromName,
+                        @Value("${app.frontend.url}") String frontendUrl) {
         this.mailSender = mailSender;
         this.fromEmail = fromEmail;
         this.fromName = fromName;
+        this.frontendUrl = frontendUrl;
     }
 
     /**
@@ -176,7 +179,7 @@ public class EmailService {
                                     <!-- CTA Button -->
                                     <tr>
                                         <td style="padding: 30px; text-align: center;">
-                                            <a href="http://localhost:3000/dashboard" style="display: inline-block; background-color: #e74c3c; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 15px; box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);">
+                                            <a href="%s/dashboard" style="display: inline-block; background-color: #e74c3c; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 15px; box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);">
                                                 View Your Review
                                             </a>
                                         </td>
@@ -226,7 +229,8 @@ public class EmailService {
                 mediaTypeDisplay,
                 stars,
                 rating,
-                displayReview
+                displayReview,
+                frontendUrl
         );
     }
 }

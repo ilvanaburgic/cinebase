@@ -41,6 +41,9 @@ public class TmdbClient {
         this.client = WebClient.builder()
                 .baseUrl(baseUrl)
                 .defaultHeader(HttpHeaders.ACCEPT, "application/json")
+                .codecs(configurer -> configurer
+                        .defaultCodecs()
+                        .maxInMemorySize(2 * 1024 * 1024)) // 2MB buffer for large season responses
                 .build();
 
         log.info("TmdbClient initialized with base URL: {}", baseUrl);
